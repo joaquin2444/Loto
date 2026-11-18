@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Resultados de lotería</title>
+<title>ESTANC DEL PASSEIG · Resultados de lotería</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -42,6 +42,8 @@
   }
   main { max-width: 560px; margin: 0 auto; padding: 28px 20px 48px; }
   h1 { font-size: 1.9rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h1.marca { font-size: 1.65rem; letter-spacing: 0.03em; line-height: 1.15; margin: 0 0 6px; }
+  .subtitulo { margin: 0 0 2px; font-size: 1.1rem; font-weight: 600; }
   .actualizado { margin: 0 0 8px; color: var(--suave); font-size: 0.95rem; }
   .aviso { color: var(--suave); }
   .error { color: var(--bono); }
@@ -143,10 +145,11 @@
   }
 
   function portada() {
-    document.title = "Resultados de lotería";
+    document.title = "ESTANC DEL PASSEIG · Resultados de lotería";
     const app = document.getElementById("app");
     app.textContent = "";
-    app.appendChild(crear("h1", "", "Resultados de lotería"));
+    app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
+    app.appendChild(crear("p", "subtitulo", "Resultados de lotería"));
     if (DATA.actualizado) {
       const f = new Date(DATA.actualizado + "T12:00:00");
       const t = isNaN(f) ? DATA.actualizado
