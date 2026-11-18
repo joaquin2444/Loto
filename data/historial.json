@@ -29,16 +29,16 @@
         "iso": "2026-11-18",
         "fecha": "Miércoles, 18 noviembre 2026",
         "numeros": [
-          "?",
-          "?",
-          "?",
-          "?",
-          "?",
-          "?"
+          "4",
+          "5",
+          "9",
+          "15",
+          "37",
+          "44"
         ],
         "extras": [
-          "C ?",
-          "R ?"
+          "C 24",
+          "R 7"
         ],
         "etiquetas": {
           "C": "Complementario",
