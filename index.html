@@ -162,6 +162,8 @@
       if (ultimo) {
         a.appendChild(crear("p", "fecha", ultimo.fecha || ""));
         a.appendChild(bolas(ultimo.numeros));
+        const ex = extras(ultimo);
+        if (ex) a.appendChild(ex);
       } else {
         a.appendChild(crear("p", "fecha", "Sin datos todavía"));
       }
