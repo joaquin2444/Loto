@@ -1,0 +1,61 @@
+{
+  "actualizado": "2026-11-18",
+  "juegos": {
+    "primitiva": [
+      {
+        "iso": "2026-11-16",
+        "fecha": "Lunes, 16 noviembre 2026",
+        "numeros": [
+          "8",
+          "9",
+          "17",
+          "34",
+          "43",
+          "48"
+        ],
+        "extras": [
+          "C 29",
+          "R 0"
+        ],
+        "joker": "6436393"
+      }
+    ],
+    "bonoloto": [
+      {
+        "iso": "2026-11-18",
+        "fecha": "Miércoles, 18 noviembre 2026",
+        "numeros": [
+          "?",
+          "?",
+          "?",
+          "?",
+          "?",
+          "?"
+        ],
+        "extras": [
+          "C ?",
+          "R ?"
+        ],
+        "joker": null
+      }
+    ],
+    "euromillones": [
+      {
+        "iso": "2026-11-17",
+        "fecha": "Martes, 17 noviembre 2026",
+        "numeros": [
+          "35",
+          "37",
+          "38",
+          "46",
+          "48"
+        ],
+        "extras": [
+          "E 1",
+          "E 2"
+        ],
+        "joker": null
+      }
+    ]
+  }
+}
