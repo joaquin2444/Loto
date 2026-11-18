@@ -1,15 +1,11 @@
 import re
-import urllib.error
 import urllib.request
 
-WEBS = [
-    "https://www.combinacionganadora.com/",
-    "https://www.combinacionganadora.com/primitiva/",
-    "https://www.combinacionganadora.com/bonoloto/",
-    "https://www.combinacionganadora.com/euromillones/",
-    "https://loteriabonoloto.info/",
-    "https://laprimitiva.info/",
-]
+WEBS = {
+    "primitiva": "https://www.combinacionganadora.com/primitiva/",
+    "bonoloto": "https://www.combinacionganadora.com/bonoloto/",
+    "euromillones": "https://www.combinacionganadora.com/euromillones/",
+}
 
 HEADERS = {
     "User-Agent": (
@@ -20,18 +16,34 @@ HEADERS = {
     "Accept-Language": "es-ES,es;q=0.9",
 }
 
-for url in WEBS:
-    print("---", url)
+# Busca 5 o 6 números seguidos (una combinación ganadora)
+PATRON = re.compile(r"(?:\b\d{1,2}\b\W{1,6}){5,6}\b\d{1,2}\b")
+
+for nombre, url in WEBS.items():
+    print("=====", nombre)
     try:
         req = urllib.request.Request(url, headers=HEADERS)
         with urllib.request.urlopen(req, timeout=30) as r:
             html = r.read().decode("utf-8", "replace")
-        texto = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
-        texto = re.sub(r"<[^>]+>", " ", texto)
-        texto = re.sub(r"\s+", " ", texto).strip()
-        print("OK", r.status, len(html), "caracteres")
-        print(texto[:250])
-    except urllib.error.HTTPError as e:
-        print("ERROR HTTP", e.code)
+
+        # Quitar scripts y estilos
+        limpio = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
+
+        # Texto plano
+        texto = re.sub(r"<[^>]+>", " ", limpio)
+        texto = re.sub(r"\s+", " ", texto)
+        m = PATRON.search(texto)
+        if m:
+            print("TEXTO:", texto[max(0, m.start() - 150): m.end() + 250])
+        else:
+            print("TEXTO: no encontrado")
+
+        # HTML crudo alrededor de los números (para ver las etiquetas)
+        h = re.sub(r"\s+", " ", limpio)
+        m2 = re.search(r"(?:<li[^>]*>\s*\d{1,2}\s*</li>\s*){5}", h)
+        if m2:
+            print("HTML:", h[max(0, m2.start() - 200): m2.end() + 300])
+        else:
+            print("HTML: no encontrado el patron de <li>")
     except Exception as e:
         print("ERROR", e)
