@@ -2,16 +2,54 @@
   "actualizado": "2026-11-18",
   "juegos": {
     "primitiva": {
-      "error": "HTTP Error 403: Forbidden"
+      "fecha": "Lunes, 16 noviembre 2026",
+      "numeros": [
+        "8",
+        "9",
+        "17",
+        "34",
+        "43",
+        "48"
+      ],
+      "extras": [
+        "C 29",
+        "R 0"
+      ],
+      "joker": "6436393",
+      "fuente": "https://www.combinacionganadora.com/primitiva/"
     },
     "bonoloto": {
-      "error": "HTTP Error 403: Forbidden"
+      "fecha": "Martes, 17 noviembre 2026",
+      "numeros": [
+        "16",
+        "18",
+        "22",
+        "28",
+        "29",
+        "34"
+      ],
+      "extras": [
+        "C 11",
+        "R 0"
+      ],
+      "joker": null,
+      "fuente": "https://www.combinacionganadora.com/bonoloto/"
     },
     "euromillones": {
-      "error": "HTTP Error 403: Forbidden"
-    },
-    "gordo": {
-      "error": "HTTP Error 403: Forbidden"
+      "fecha": "Martes, 17 noviembre 2026",
+      "numeros": [
+        "35",
+        "37",
+        "38",
+        "46",
+        "48"
+      ],
+      "extras": [
+        "E 1",
+        "E 2"
+      ],
+      "joker": null,
+      "fuente": "https://www.combinacionganadora.com/euromillones/"
     }
   }
 }
