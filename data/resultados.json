@@ -1,0 +1,17 @@
+{
+  "actualizado": "2026-11-18",
+  "juegos": {
+    "primitiva": {
+      "error": "HTTP Error 403: Forbidden"
+    },
+    "bonoloto": {
+      "error": "HTTP Error 403: Forbidden"
+    },
+    "euromillones": {
+      "error": "HTTP Error 403: Forbidden"
+    },
+    "gordo": {
+      "error": "HTTP Error 403: Forbidden"
+    }
+  }
+}
