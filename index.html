@@ -14,6 +14,8 @@
     --prim: #1f7a4d;
     --bono: #b5432a;
     --euro: #2349a8;
+    --dream: #7a3f9e;
+    --gordo: #0f7c8a;
     --estrella: #f2b01e;
   }
   @media (prefers-color-scheme: dark) {
@@ -25,6 +27,8 @@
       --prim: #2fa468;
       --bono: #d9674c;
       --euro: #5b82e0;
+      --dream: #b684d8;
+      --gordo: #43b8c6;
     }
   }
   * { box-sizing: border-box; }
@@ -46,6 +50,8 @@
   .c-prim { --c: var(--prim); }
   .c-bono { --c: var(--bono); }
   .c-euro { --c: var(--euro); }
+  .c-dream { --c: var(--dream); }
+  .c-gordo { --c: var(--gordo); }
 
   /* Bolas */
   .bolas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -92,8 +98,10 @@
 <script>
   const JUEGOS = [
     { id: "primitiva", nombre: "La Primitiva", clase: "c-prim" },
+    { id: "elgordo", nombre: "El Gordo de la Primitiva", clase: "c-gordo" },
     { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono" },
-    { id: "euromillones", nombre: "Euromillones", clase: "c-euro" }
+    { id: "euromillones", nombre: "Euromillones", clase: "c-euro" },
+    { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream" }
   ];
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -120,7 +128,8 @@
       const m = /^([A-Z])\s*(\d+)$/.exec(String(t).trim());
       if (!m) return;
       if (m[1] === "E") { estrellas.push(m[2]); return; }
-      const nombre = m[1] === "C" ? "Complementario" : m[1] === "R" ? "Reintegro" : m[1];
+      const propios = { C: "Complementario", R: "Reintegro", S: "Sueño" };
+      const nombre = (s.etiquetas && s.etiquetas[m[1]]) || propios[m[1]] || m[1];
       cont.appendChild(crear("span", "chip", nombre + " " + m[2]));
     });
     if (estrellas.length) cont.appendChild(crear("span", "chip estrellas", "Estrellas " + estrellas.join(" y ")));
