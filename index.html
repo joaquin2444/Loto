@@ -39,59 +39,65 @@
   main { max-width: 560px; margin: 0 auto; padding: 28px 20px 48px; }
   h1 { font-size: 1.9rem; margin: 0 0 4px; letter-spacing: -0.01em; }
   .actualizado { margin: 0 0 8px; color: var(--suave); font-size: 0.95rem; }
+  .aviso { color: var(--suave); }
+  .error { color: var(--bono); }
+  a { color: inherit; }
 
-  .juego { margin: 30px 0 0; padding-left: 16px; border-left: 6px solid var(--c); }
-  .juego.prim { --c: var(--prim); }
-  .juego.bono { --c: var(--bono); }
-  .juego.euro { --c: var(--euro); }
-  .juego h2 { font-size: 1.3rem; margin: 0; }
-  .fecha { margin: 2px 0 14px; color: var(--suave); font-size: 0.95rem; }
+  .c-prim { --c: var(--prim); }
+  .c-bono { --c: var(--bono); }
+  .c-euro { --c: var(--euro); }
 
-  .bolas, .extras { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  /* Bolas */
+  .bolas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .bola {
-    width: 48px; height: 48px; border-radius: 50%;
+    width: var(--t, 40px); height: var(--t, 40px); border-radius: 50%;
     display: grid; place-items: center;
-    font-size: 1.15rem; font-weight: 700; color: #fff;
+    font-size: calc(var(--t, 40px) * 0.4); font-weight: 700; color: #fff;
     font-variant-numeric: tabular-nums;
     background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.35), transparent 45%), var(--c);
   }
-  .extras { margin-top: 16px; gap: 18px; align-items: flex-end; }
-  .extra { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--suave); }
-  .extra .fila { display: flex; gap: 8px; }
-  .mini {
-    width: 38px; height: 38px; border-radius: 50%;
-    display: grid; place-items: center;
-    font-size: 1rem; font-weight: 700; color: var(--c);
-    border: 2px solid var(--c);
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip {
+    font-size: 0.85rem; padding: 2px 10px; border-radius: 999px;
+    border: 1.5px solid var(--c); color: var(--texto);
     font-variant-numeric: tabular-nums;
   }
-  .estrella {
-    width: 46px; height: 46px;
-    display: grid; place-items: center;
-    font-size: 1rem; font-weight: 700; color: #3a2a00;
-    background: var(--estrella);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    padding-top: 4px;
+  .chip.estrellas { border-color: var(--estrella); }
+
+  /* Portada */
+  .juegos { margin-top: 26px; display: grid; gap: 22px; }
+  .juego-link {
+    display: block; text-decoration: none;
+    padding: 4px 0 4px 16px; border-left: 6px solid var(--c);
   }
-  .joker { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.12em; color: var(--texto); font-variant-numeric: tabular-nums; }
-  .aviso { color: var(--suave); }
-  .error { color: var(--bono); }
+  .juego-link:focus-visible, .volver:focus-visible { outline: 3px solid var(--c, var(--texto)); outline-offset: 4px; }
+  .juego-link h2 { font-size: 1.3rem; margin: 0; }
+  .juego-link .fecha { margin: 2px 0 12px; color: var(--suave); font-size: 0.95rem; }
+  .juego-link .bolas { --t: 38px; }
+  .ver { display: inline-block; margin-top: 10px; color: var(--suave); font-size: 0.9rem; }
+
+  /* Pantalla de un juego */
+  .volver { display: inline-block; margin: 0 0 18px; color: var(--suave); text-decoration: none; font-size: 0.95rem; }
+  .cabecera { padding-left: 16px; border-left: 6px solid var(--c); }
+  .cabecera h1 { margin: 0; }
+  h2.mes { font-size: 1.05rem; margin: 30px 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--linea); text-transform: none; }
+  .sorteo { padding: 14px 0; border-bottom: 1px solid var(--linea); }
+  .sorteo .fecha { margin: 0 0 8px; color: var(--suave); font-size: 0.9rem; }
+  .sorteo .bolas { --t: 38px; }
 </style>
 </head>
 <body>
-<main>
-  <h1>Resultados de lotería</h1>
-  <p class="actualizado" id="actualizado"></p>
-  <div id="juegos" aria-live="polite"><p class="aviso">Cargando resultados…</p></div>
-</main>
+<main id="app"><p class="aviso">Cargando resultados…</p></main>
 
 <script>
   const JUEGOS = [
-    { id: "primitiva", nombre: "La Primitiva", clase: "prim" },
-    { id: "bonoloto", nombre: "Bonoloto", clase: "bono" },
-    { id: "euromillones", nombre: "Euromillones", clase: "euro" }
+    { id: "primitiva", nombre: "La Primitiva", clase: "c-prim" },
+    { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono" },
+    { id: "euromillones", nombre: "Euromillones", clase: "c-euro" }
   ];
-  const ETIQUETAS = { C: "Complementario", R: "Reintegro", E: "Estrellas" };
+  const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+                 "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  let DATA = null;
 
   function crear(etiqueta, clase, texto) {
     const e = document.createElement(etiqueta);
@@ -100,83 +106,138 @@
     return e;
   }
 
-  function dibujarJuego(def, datos) {
-    const sec = crear("section", "juego " + def.clase);
-    sec.appendChild(crear("h2", "", def.nombre));
+  function bolas(numeros) {
+    const ul = crear("ul", "bolas");
+    ul.setAttribute("aria-label", "Números");
+    numeros.forEach(function (n) { ul.appendChild(crear("li", "bola", n)); });
+    return ul;
+  }
 
-    if (!datos || datos.error || !datos.numeros || !datos.numeros.length) {
-      sec.appendChild(crear("p", "aviso", "No hay datos de este juego. Se actualizarán en la próxima ejecución."));
-      return sec;
-    }
-
-    if (datos.fecha) sec.appendChild(crear("p", "fecha", datos.fecha));
-
-    const bolas = crear("ul", "bolas");
-    bolas.setAttribute("aria-label", "Números");
-    datos.numeros.forEach(function (n) { bolas.appendChild(crear("li", "bola", n)); });
-    sec.appendChild(bolas);
-
-    const extras = crear("ul", "extras");
+  function extras(s) {
+    const cont = crear("div", "chips");
     const estrellas = [];
-
-    (datos.extras || []).forEach(function (texto) {
-      const m = /^([A-Z])\s*(\d+)$/.exec(texto.trim());
+    (s.extras || []).forEach(function (t) {
+      const m = /^([A-Z])\s*(\d+)$/.exec(String(t).trim());
       if (!m) return;
       if (m[1] === "E") { estrellas.push(m[2]); return; }
-      const li = crear("li", "extra");
-      const fila = crear("div", "fila");
-      fila.appendChild(crear("span", "mini", m[2]));
-      li.appendChild(fila);
-      li.appendChild(crear("span", "", ETIQUETAS[m[1]] || m[1]));
-      extras.appendChild(li);
+      const nombre = m[1] === "C" ? "Complementario" : m[1] === "R" ? "Reintegro" : m[1];
+      cont.appendChild(crear("span", "chip", nombre + " " + m[2]));
     });
-
-    if (estrellas.length) {
-      const li = crear("li", "extra");
-      const fila = crear("div", "fila");
-      estrellas.forEach(function (n) { fila.appendChild(crear("span", "estrella", n)); });
-      li.appendChild(fila);
-      li.appendChild(crear("span", "", ETIQUETAS.E));
-      extras.appendChild(li);
-    }
-
-    if (datos.joker) {
-      const li = crear("li", "extra");
-      li.appendChild(crear("span", "joker", datos.joker));
-      li.appendChild(crear("span", "", "Joker"));
-      extras.appendChild(li);
-    }
-
-    if (extras.children.length) sec.appendChild(extras);
-    return sec;
+    if (estrellas.length) cont.appendChild(crear("span", "chip estrellas", "Estrellas " + estrellas.join(" y ")));
+    if (s.joker) cont.appendChild(crear("span", "chip", "Joker " + s.joker));
+    return cont.children.length ? cont : null;
   }
 
-  function dibujar(data) {
-    const cont = document.getElementById("juegos");
-    cont.textContent = "";
-    JUEGOS.forEach(function (def) {
-      cont.appendChild(dibujarJuego(def, data.juegos && data.juegos[def.id]));
-    });
+  function sorteosDe(id) {
+    const lista = DATA.juegos && DATA.juegos[id];
+    return Array.isArray(lista) ? lista : [];
+  }
 
-    if (data.actualizado) {
-      const f = new Date(data.actualizado + "T12:00:00");
-      const texto = isNaN(f) ? data.actualizado
+  function portada() {
+    document.title = "Resultados de lotería";
+    const app = document.getElementById("app");
+    app.textContent = "";
+    app.appendChild(crear("h1", "", "Resultados de lotería"));
+    if (DATA.actualizado) {
+      const f = new Date(DATA.actualizado + "T12:00:00");
+      const t = isNaN(f) ? DATA.actualizado
         : f.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
-      document.getElementById("actualizado").textContent = "Actualizado el " + texto;
+      app.appendChild(crear("p", "actualizado", "Actualizado el " + t));
     }
+    const cont = crear("div", "juegos");
+    JUEGOS.forEach(function (def) {
+      const a = crear("a", "juego-link " + def.clase);
+      a.href = "#" + def.id;
+      a.appendChild(crear("h2", "", def.nombre));
+      const ultimo = sorteosDe(def.id)[0];
+      if (ultimo) {
+        a.appendChild(crear("p", "fecha", ultimo.fecha || ""));
+        a.appendChild(bolas(ultimo.numeros));
+      } else {
+        a.appendChild(crear("p", "fecha", "Sin datos todavía"));
+      }
+      a.appendChild(crear("span", "ver", "Ver los últimos 3 meses"));
+      cont.appendChild(a);
+    });
+    app.appendChild(cont);
   }
 
-  fetch("data/resultados.json?t=" + Date.now(), { cache: "no-store" })
-    .then(function (r) {
+  function pantallaJuego(def) {
+    document.title = def.nombre + " · Resultados";
+    const app = document.getElementById("app");
+    app.textContent = "";
+
+    const volver = crear("a", "volver", "Volver a los juegos");
+    volver.href = "#";
+    app.appendChild(volver);
+
+    const cab = crear("div", "cabecera " + def.clase);
+    cab.appendChild(crear("h1", "", def.nombre));
+    app.appendChild(cab);
+
+    const lista = sorteosDe(def.id);
+    if (!lista.length) {
+      app.appendChild(crear("p", "aviso", "Todavía no hay sorteos guardados de este juego."));
+      return;
+    }
+
+    const caja = crear("div", def.clase);
+    let mesActual = null;
+    lista.forEach(function (s) {
+      let mes = "Sin fecha";
+      if (s.iso) {
+        const p = s.iso.split("-");
+        mes = MESES[parseInt(p[1], 10) - 1] + " de " + p[0];
+      }
+      if (mes !== mesActual) {
+        caja.appendChild(crear("h2", "mes", mes));
+        mesActual = mes;
+      }
+      const bloque = crear("div", "sorteo");
+      bloque.appendChild(crear("p", "fecha", s.fecha || ""));
+      bloque.appendChild(bolas(s.numeros));
+      const ex = extras(s);
+      if (ex) bloque.appendChild(ex);
+      caja.appendChild(bloque);
+    });
+    app.appendChild(caja);
+  }
+
+  function ruta() {
+    if (!DATA) return;
+    const id = location.hash.slice(1);
+    const def = JUEGOS.find(function (j) { return j.id === id; });
+    if (def) pantallaJuego(def); else portada();
+    window.scrollTo(0, 0);
+  }
+
+  function cargar(url) {
+    return fetch(url + "?t=" + Date.now(), { cache: "no-store" }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
-    })
-    .then(dibujar)
-    .catch(function () {
-      const cont = document.getElementById("juegos");
-      cont.textContent = "";
-      cont.appendChild(crear("p", "error", "No se han podido cargar los resultados. Si abres este archivo directamente desde el móvil no funcionará; ábrelo desde la dirección de GitHub Pages."));
     });
+  }
+
+  // Si todavía no existe el historial, se usa el último resultado guardado
+  cargar("data/historial.json")
+    .catch(function () {
+      return cargar("data/resultados.json").then(function (d) {
+        const juegos = {};
+        Object.keys(d.juegos || {}).forEach(function (k) {
+          const j = d.juegos[k];
+          juegos[k] = j && j.numeros ? [j] : [];
+        });
+        return { actualizado: d.actualizado, juegos: juegos };
+      });
+    })
+    .then(function (d) { DATA = d; ruta(); })
+    .catch(function () {
+      const app = document.getElementById("app");
+      app.textContent = "";
+      app.appendChild(crear("p", "error", "No se han podido cargar los resultados. Si abres este archivo directamente desde el móvil no funcionará; ábrelo desde la dirección de GitHub Pages."));
+    });
+
+  window.addEventListener("hashchange", ruta);
 </script>
 </body>
 </html>
