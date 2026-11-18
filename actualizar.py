@@ -51,6 +51,17 @@ def a_iso(texto):
         return None
 
 
+def valido(e):
+    """Un sorteo es valido si todos sus numeros son cifras (no '?' de un sorteo pendiente)."""
+    numeros = e.get("numeros") or []
+    extras = e.get("extras") or []
+    return (
+        len(numeros) > 0
+        and all(re.fullmatch(r"\d+", str(n)) for n in numeros)
+        and all(re.fullmatch(r"[A-Z]\s*\d+", str(x)) for x in extras)
+    )
+
+
 def extraer(nombre, html):
     html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
 
@@ -111,6 +122,9 @@ if os.path.exists(RUTA):
     except Exception as e:
         print("No se pudo leer el historial, se empieza de nuevo:", e)
 
+for _nombre in list(historial.get("juegos", {})):
+    historial["juegos"][_nombre] = [e for e in historial["juegos"][_nombre] if valido(e)]
+
 hoy = date.today()
 limite = (hoy - timedelta(days=DIAS_A_GUARDAR)).isoformat()
 historial["actualizado"] = hoy.isoformat()
@@ -128,6 +142,10 @@ for nombre, url in WEBS.items():
 
     if "error" in datos or not datos.get("numeros"):
         print(nombre, "sin datos:", datos.get("error"))
+        continue
+
+    if not valido(datos):
+        print(nombre, "sorteo todavia sin resultados, se omite")
         continue
 
     entrada = {
