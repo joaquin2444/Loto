@@ -10,6 +10,10 @@ WEBS = {
     "bonoloto": "https://www.combinacionganadora.com/bonoloto/",
     "euromillones": "https://www.combinacionganadora.com/euromillones/",
     "eurodreams": "https://www.combinacionganadora.com/eurodreams/",
+    "loterianacional": [
+        "https://www.combinacionganadora.com/loterianacional/",
+        "https://www.combinacionganadora.com/loteria-nacional/",
+    ],
 }
 
 DIAS_A_GUARDAR = 100  # un poco mas de 3 meses
@@ -53,6 +57,15 @@ def a_iso(texto):
 
 def valido(e):
     """Un sorteo es valido si todos sus numeros son cifras (no '?' de un sorteo pendiente)."""
+    if "primero" in e:
+        premio = r"\d{2}\.\d{3}|\d{5}"
+        return (
+            re.fullmatch(premio, str(e.get("primero")))
+            and re.fullmatch(premio, str(e.get("segundo")))
+            and len(e.get("cifras4") or []) > 0
+            and len(e.get("cifras3") or []) > 0
+            and len(e.get("cifras2") or []) > 0
+        ) is not None
     numeros = e.get("numeros") or []
     extras = e.get("extras") or []
     return (
@@ -112,6 +125,56 @@ def extraer(nombre, html):
     }
 
 
+def extraer_nacional(html):
+    html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
+    texto = limpiar(html)
+
+    # Primer y segundo premio (en cualquiera de los dos ordenes posibles)
+    m = re.search(
+        r"primer premio\W+(?:segundo premio\W+)?(\d{2}\.\d{3})\W+(?:segundo premio\W+)?(\d{2}\.\d{3})",
+        texto, flags=re.I)
+    if not m:
+        return {"error": "no se encontraron el primer y segundo premio"}
+
+    antes = texto[max(0, m.start() - 400): m.start()]
+    con_dia = FECHA_DIA.findall(antes)
+    fecha = con_dia[-1] if con_dia else None
+
+    resto = texto[m.end():]
+
+    def pos(patron, desde=0):
+        mm = re.search(patron, resto[desde:], flags=re.I)
+        return (desde + mm.start(), desde + mm.end()) if mm else None
+
+    p4 = pos(r"[úu]ltimas\s*4\s*cifras")
+    if not p4:
+        return {"error": "no aparece 'Ultimas 4 cifras'"}
+    p3 = pos(r"[úu]ltimas\s*3\s*cifras", p4[1])
+    p2 = pos(r"[úu]ltimas\s*2\s*cifras", p3[1]) if p3 else None
+    pr = pos(r"reintegros?", p2[1]) if p2 else None
+    if not (p3 and p2):
+        return {"error": "faltan las secciones de 3 o 2 cifras"}
+
+    cifras4 = re.findall(r"\b\d{4}\b", resto[p4[1]: p3[0]])
+    cifras3 = re.findall(r"\b\d{3}\b", resto[p3[1]: p2[0]])
+    fin2 = pr[0] if pr else p2[1] + 200
+    cifras2 = re.findall(r"\b\d{2}\b", resto[p2[1]: fin2])
+    reintegros = []
+    if pr:
+        reintegros = re.findall(r"\b\d\b", resto[pr[1]: pr[1] + 30])[:3]
+
+    return {
+        "fecha": fecha,
+        "iso": a_iso(fecha),
+        "primero": m.group(1),
+        "segundo": m.group(2),
+        "cifras4": cifras4,
+        "cifras3": cifras3,
+        "cifras2": cifras2,
+        "reintegros": reintegros,
+    }
+
+
 # Cargar el historial que ya existe
 os.makedirs("data", exist_ok=True)
 historial = {"actualizado": "", "juegos": {}}
@@ -131,31 +194,42 @@ historial["actualizado"] = hoy.isoformat()
 historial.setdefault("juegos", {})
 
 for nombre, url in WEBS.items():
-    try:
-        req = urllib.request.Request(url, headers=HEADERS)
-        with urllib.request.urlopen(req, timeout=30) as r:
-            html = r.read().decode("utf-8", "replace")
-        datos = extraer(nombre, html)
-    except Exception as e:
-        print(nombre, "ERROR", e)
+    urls = url if isinstance(url, list) else [url]
+    html = None
+    for u in urls:
+        try:
+            req = urllib.request.Request(u, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                html = r.read().decode("utf-8", "replace")
+            break
+        except Exception as e:
+            print(nombre, "ERROR", u, e)
+    if html is None:
         continue
 
-    if "error" in datos or not datos.get("numeros"):
-        print(nombre, "sin datos:", datos.get("error"))
+    es_nacional = nombre == "loterianacional"
+    datos = extraer_nacional(html) if es_nacional else extraer(nombre, html)
+
+    if "error" in datos:
+        print(nombre, "sin datos:", datos["error"])
         continue
 
     if not valido(datos):
         print(nombre, "sorteo todavia sin resultados, se omite")
         continue
 
-    entrada = {
-        "iso": datos["iso"],
-        "fecha": datos["fecha"],
-        "numeros": datos["numeros"],
-        "extras": datos["extras"],
-        "etiquetas": datos.get("etiquetas", {}),
-        "joker": datos["joker"],
-    }
+    if es_nacional:
+        entrada = {k: datos[k] for k in (
+            "iso", "fecha", "primero", "segundo", "cifras4", "cifras3", "cifras2", "reintegros")}
+    else:
+        entrada = {
+            "iso": datos["iso"],
+            "fecha": datos["fecha"],
+            "numeros": datos["numeros"],
+            "extras": datos["extras"],
+            "etiquetas": datos.get("etiquetas", {}),
+            "joker": datos["joker"],
+        }
     clave = entrada["iso"] or entrada["fecha"]
 
     lista = historial["juegos"].setdefault(nombre, [])
