@@ -16,6 +16,7 @@
     --euro: #2349a8;
     --dream: #7a3f9e;
     --gordo: #0f7c8a;
+    --nacional: #6c6794;
     --estrella: #f2b01e;
   }
   @media (prefers-color-scheme: dark) {
@@ -29,6 +30,7 @@
       --euro: #5b82e0;
       --dream: #b684d8;
       --gordo: #43b8c6;
+      --nacional: #a9a3d6;
     }
   }
   * { box-sizing: border-box; }
@@ -54,6 +56,7 @@
   .c-euro { --c: var(--euro); }
   .c-dream { --c: var(--dream); }
   .c-gordo { --c: var(--gordo); }
+  .c-nacional { --c: var(--nacional); }
 
   /* Bolas */
   .bolas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -71,6 +74,15 @@
     font-variant-numeric: tabular-nums;
   }
   .chip.estrellas { border-color: var(--estrella); }
+
+  /* Loteria Nacional: premios y terminaciones */
+  .premios { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 28px; }
+  .premio .rotulo { display: inline-block; font-size: 0.9rem; color: var(--suave); border-bottom: 1px dotted var(--c); padding-bottom: 2px; }
+  .premio .gran { display: block; margin-top: 4px; font-size: 2.1rem; font-weight: 800; line-height: 1.1; color: var(--c); font-variant-numeric: tabular-nums; }
+  .premio.segundo .gran { font-size: 1.6rem; }
+  .grupo { margin-top: 16px; }
+  .grupo h3 { margin: 0 0 6px; padding-bottom: 3px; font-size: 0.9rem; font-weight: 500; color: var(--suave); border-bottom: 1px dotted var(--c); }
+  .grupo .nums { display: flex; flex-wrap: wrap; gap: 2px 16px; font-size: 1.25rem; font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; }
 
   /* Portada */
   .juegos { margin-top: 26px; display: grid; gap: 22px; }
@@ -103,7 +115,8 @@
     { id: "elgordo", nombre: "El Gordo de la Primitiva", clase: "c-gordo" },
     { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono" },
     { id: "euromillones", nombre: "Euromillones", clase: "c-euro" },
-    { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream" }
+    { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream" },
+    { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional" }
   ];
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -139,6 +152,27 @@
     return cont.children.length ? cont : null;
   }
 
+  function premios(s) {
+    const cont = crear("div", "premios");
+    [["Primer premio", s.primero, ""], ["Segundo premio", s.segundo, "segundo"]].forEach(function (p) {
+      const d = crear("div", "premio " + p[2]);
+      d.appendChild(crear("span", "rotulo", p[0]));
+      d.appendChild(crear("span", "gran", p[1]));
+      cont.appendChild(d);
+    });
+    return cont;
+  }
+
+  function grupo(titulo, lista) {
+    if (!lista || !lista.length) return null;
+    const g = crear("div", "grupo");
+    g.appendChild(crear("h3", "", titulo));
+    const n = crear("div", "nums");
+    lista.forEach(function (x) { n.appendChild(crear("span", "", x)); });
+    g.appendChild(n);
+    return g;
+  }
+
   function sorteosDe(id) {
     const lista = DATA.juegos && DATA.juegos[id];
     return Array.isArray(lista) ? lista : [];
@@ -164,9 +198,13 @@
       const ultimo = sorteosDe(def.id)[0];
       if (ultimo) {
         a.appendChild(crear("p", "fecha", ultimo.fecha || ""));
-        a.appendChild(bolas(ultimo.numeros));
-        const ex = extras(ultimo);
-        if (ex) a.appendChild(ex);
+        if (ultimo.primero) {
+          a.appendChild(premios(ultimo));
+        } else {
+          a.appendChild(bolas(ultimo.numeros));
+          const ex = extras(ultimo);
+          if (ex) a.appendChild(ex);
+        }
       } else {
         a.appendChild(crear("p", "fecha", "Sin datos todavía"));
       }
@@ -209,9 +247,18 @@
       }
       const bloque = crear("div", "sorteo");
       bloque.appendChild(crear("p", "fecha", s.fecha || ""));
-      bloque.appendChild(bolas(s.numeros));
-      const ex = extras(s);
-      if (ex) bloque.appendChild(ex);
+      if (s.primero) {
+        bloque.appendChild(premios(s));
+        [["Últimas 4 cifras", s.cifras4], ["Últimas 3 cifras", s.cifras3],
+         ["Últimas 2 cifras", s.cifras2], ["Reintegros", s.reintegros]].forEach(function (g) {
+          const el = grupo(g[0], g[1]);
+          if (el) bloque.appendChild(el);
+        });
+      } else {
+        bloque.appendChild(bolas(s.numeros));
+        const ex = extras(s);
+        if (ex) bloque.appendChild(ex);
+      }
       caja.appendChild(bloque);
     });
     app.appendChild(caja);
