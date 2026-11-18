@@ -2,13 +2,16 @@ import json
 import os
 import re
 import urllib.request
-from datetime import date
+from datetime import date, timedelta
 
 WEBS = {
     "primitiva": "https://www.combinacionganadora.com/primitiva/",
     "bonoloto": "https://www.combinacionganadora.com/bonoloto/",
     "euromillones": "https://www.combinacionganadora.com/euromillones/",
 }
+
+DIAS_A_GUARDAR = 100  # un poco mas de 3 meses
+RUTA = "data/historial.json"
 
 HEADERS = {
     "User-Agent": (
@@ -24,6 +27,11 @@ FECHA_DIA = re.compile(
     r"(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo),? \d{1,2} [a-záéíóúñ]+ \d{4}",
     re.I,
 )
+MESES = {
+    "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
+    "julio": 7, "agosto": 8, "septiembre": 9, "setiembre": 9, "octubre": 10,
+    "noviembre": 11, "diciembre": 12,
+}
 
 
 def limpiar(fragmento):
@@ -31,10 +39,19 @@ def limpiar(fragmento):
     return re.sub(r"\s+", " ", texto).strip()
 
 
+def a_iso(texto):
+    m = re.search(r"(\d{1,2})(?: de)? ([a-záéíóúñ]+)(?: de)? (\d{4})", (texto or "").lower())
+    if not m or m.group(2) not in MESES:
+        return None
+    try:
+        return date(int(m.group(3)), MESES[m.group(2)], int(m.group(1))).isoformat()
+    except ValueError:
+        return None
+
+
 def extraer(nombre, html):
     html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
 
-    # Primero busca la lista de numeros de ese juego; si no, la primera lista "numbers"
     m = re.search(
         r'<ul[^>]*data-gametype="' + nombre + r'"[^>]*>(.*?)</ul>', html, flags=re.S
     )
@@ -56,9 +73,7 @@ def extraer(nombre, html):
         else:
             numeros.append(valor)
 
-    # Fecha: la ultima que aparece en el texto justo antes de los numeros
     antes = limpiar(html[max(0, m.start() - 3000): m.start()])
-    # La fecha del sorteo mostrado aparece con dia de la semana: "Lunes, 16 noviembre 2026"
     con_dia = FECHA_DIA.findall(antes)
     if con_dia:
         fecha = con_dia[-1]
@@ -66,20 +81,32 @@ def extraer(nombre, html):
         fechas = FECHA.findall(antes)
         fecha = fechas[-1] if fechas else None
 
-    # Texto que sigue a los numeros (para Joker, complementario, etc.)
     despues = limpiar(html[m.end(): m.end() + 600])
     joker = re.search(r"Joker\s*(\d{7})", despues)
 
     return {
         "fecha": fecha,
+        "iso": a_iso(fecha),
         "numeros": numeros,
         "extras": extras,
         "joker": joker.group(1) if joker else None,
     }
 
 
+# Cargar el historial que ya existe
 os.makedirs("data", exist_ok=True)
-salida = {"actualizado": date.today().isoformat(), "juegos": {}}
+historial = {"actualizado": "", "juegos": {}}
+if os.path.exists(RUTA):
+    try:
+        with open(RUTA, encoding="utf-8") as f:
+            historial = json.load(f)
+    except Exception as e:
+        print("No se pudo leer el historial, se empieza de nuevo:", e)
+
+hoy = date.today()
+limite = (hoy - timedelta(days=DIAS_A_GUARDAR)).isoformat()
+historial["actualizado"] = hoy.isoformat()
+historial.setdefault("juegos", {})
 
 for nombre, url in WEBS.items():
     try:
@@ -87,14 +114,35 @@ for nombre, url in WEBS.items():
         with urllib.request.urlopen(req, timeout=30) as r:
             html = r.read().decode("utf-8", "replace")
         datos = extraer(nombre, html)
-        datos["fuente"] = url
-        salida["juegos"][nombre] = datos
-        print(nombre, datos)
     except Exception as e:
         print(nombre, "ERROR", e)
-        salida["juegos"][nombre] = {"error": str(e)}
+        continue
 
-with open("data/resultados.json", "w", encoding="utf-8") as f:
-    json.dump(salida, f, ensure_ascii=False, indent=2)
+    if "error" in datos or not datos.get("numeros"):
+        print(nombre, "sin datos:", datos.get("error"))
+        continue
 
-print("Guardado data/resultados.json")
+    entrada = {
+        "iso": datos["iso"],
+        "fecha": datos["fecha"],
+        "numeros": datos["numeros"],
+        "extras": datos["extras"],
+        "joker": datos["joker"],
+    }
+    clave = entrada["iso"] or entrada["fecha"]
+
+    lista = historial["juegos"].setdefault(nombre, [])
+    # Quitar el mismo sorteo si ya estaba, y los demasiado antiguos
+    lista[:] = [
+        e for e in lista
+        if (e.get("iso") or e.get("fecha")) != clave
+        and not (e.get("iso") and e["iso"] < limite)
+    ]
+    lista.append(entrada)
+    lista.sort(key=lambda e: e.get("iso") or "", reverse=True)
+    print(nombre, "OK", entrada["fecha"], "-", len(lista), "sorteos guardados")
+
+with open(RUTA, "w", encoding="utf-8") as f:
+    json.dump(historial, f, ensure_ascii=False, indent=2)
+
+print("Guardado", RUTA)
