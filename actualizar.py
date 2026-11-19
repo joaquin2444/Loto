@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 import urllib.request
 from datetime import date, timedelta
 
@@ -26,7 +27,36 @@ HEADERS = {
     ),
     "Accept": "text/html,application/xhtml+xml",
     "Accept-Language": "es-ES,es;q=0.9",
+    "Referer": "https://www.google.com/",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "cross-site",
+    "Sec-Fetch-User": "?1",
 }
+
+BLOQUEADO = False
+
+
+def descargar(url, intentos=3):
+    """Descarga una pagina con reintentos. Si ya se detecto un bloqueo (403), no insiste."""
+    global BLOQUEADO
+    if BLOQUEADO:
+        intentos = 1
+    ultimo = None
+    for i in range(intentos):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode("utf-8", "replace")
+        except Exception as e:
+            ultimo = e
+            if i < intentos - 1:
+                time.sleep(10 * (i + 1))
+    if "403" in str(ultimo):
+        BLOQUEADO = True
+    raise ultimo
+
 
 FECHA = re.compile(r"\d{1,2} de [a-záéíóúñ]+ de \d{4}", re.I)
 FECHA_DIA = re.compile(
@@ -227,9 +257,7 @@ for nombre, url in WEBS.items():
     html = None
     for u in urls:
         try:
-            req = urllib.request.Request(u, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=30) as r:
-                html = r.read().decode("utf-8", "replace")
+            html = descargar(u)
             break
         except Exception as e:
             print(nombre, "ERROR", u, e)
@@ -279,9 +307,7 @@ print("Guardado", RUTA)
 
 # Botes de los proximos sorteos (si falla, se conserva el archivo anterior)
 try:
-    req = urllib.request.Request(URL_BOTES, headers=HEADERS)
-    with urllib.request.urlopen(req, timeout=30) as r:
-        html_botes = r.read().decode("utf-8", "replace")
+    html_botes = descargar(URL_BOTES)
     botes_actuales = extraer_botes(html_botes)
     if botes_actuales:
         with open(RUTA_BOTES, "w", encoding="utf-8") as f:
