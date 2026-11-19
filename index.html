@@ -112,6 +112,28 @@
   .dia.con[aria-pressed="true"] { background: var(--c); color: var(--fondo); }
   .cal-nota { margin: 8px 0 0; font-size: 0.8rem; color: var(--suave); }
 
+  /* Inicio: botes y acceso a los resultados */
+  .botes { margin-top: 22px; display: grid; gap: 10px; }
+  .botes h2 { margin: 0 0 2px; font-size: 1.05rem; }
+  .bote {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 14px 12px 16px; border-left: 6px solid var(--c); border-radius: 0 14px 14px 0;
+    background: var(--fondo);
+    background: color-mix(in srgb, var(--c) var(--tinte), var(--fondo));
+  }
+  .bote .nombre { font-weight: 700; }
+  .bote .cuando { display: block; margin-top: 2px; font-size: 0.85rem; color: var(--suave); }
+  .bote .importe { font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .consultar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 26px; padding: 20px 22px; border-radius: 16px;
+    background: var(--rojo); color: var(--fondo);
+    font-size: 1.25rem; font-weight: 800; text-decoration: none;
+  }
+  .consultar:active { opacity: 0.85; }
+  .consultar:focus-visible { outline: 3px solid var(--texto); outline-offset: 3px; }
+  .consultar .flecha { font-size: 1.6rem; line-height: 1; }
+
   /* Portada */
   .juegos { margin-top: 22px; display: grid; gap: 14px; }
   .juego-link {
@@ -154,6 +176,7 @@
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   let DATA = null;
+  let BOTES = null;
 
   function crear(etiqueta, clase, texto) {
     const e = document.createElement(etiqueta);
@@ -206,6 +229,58 @@
     return g;
   }
 
+  function enlaceVolver(texto, destino) {
+    const a = crear("a", "volver");
+    a.href = destino;
+    const flecha = crear("span", "flecha", "\u2190");
+    flecha.setAttribute("aria-hidden", "true");
+    a.appendChild(flecha);
+    a.appendChild(document.createTextNode(texto));
+    return a;
+  }
+
+  function inicio() {
+    document.title = "ESTANC DEL PASSEIG";
+    const app = document.getElementById("app");
+    app.textContent = "";
+    const adorno = crear("div", "adorno");
+    adorno.innerHTML = adornoNavidad();
+    app.appendChild(adorno);
+    app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
+
+    const caja = crear("section", "botes");
+    caja.appendChild(crear("h2", "", "Botes de los próximos sorteos"));
+    const lista = [];
+    if (BOTES && BOTES.botes) {
+      JUEGOS.forEach(function (def) {
+        const b = BOTES.botes[def.id];
+        if (b && b.importe) lista.push({ def: def, b: b });
+      });
+      lista.sort(function (x, y) { return (x.b.iso || "9999").localeCompare(y.b.iso || "9999"); });
+    }
+    if (!lista.length) {
+      caja.appendChild(crear("p", "aviso", "Los botes no están disponibles ahora mismo."));
+    }
+    lista.forEach(function (x) {
+      const fila = crear("div", "bote " + x.def.clase);
+      const izq = crear("div", "");
+      izq.appendChild(crear("span", "nombre", x.def.nombre));
+      izq.appendChild(crear("span", "cuando", x.b.fecha || ""));
+      fila.appendChild(izq);
+      fila.appendChild(crear("span", "importe", x.b.importe));
+      caja.appendChild(fila);
+    });
+    app.appendChild(caja);
+
+    const ir = crear("a", "consultar");
+    ir.href = "#resultados";
+    ir.appendChild(crear("span", "", "Consultar resultados"));
+    const fl = crear("span", "flecha", "\u2192");
+    fl.setAttribute("aria-hidden", "true");
+    ir.appendChild(fl);
+    app.appendChild(ir);
+  }
+
   function adornoNavidad() {
     const colores = ["#d62839", "#f2b01e", "#2fa468", "#4a90e2"];
     let luces = "";
@@ -229,6 +304,7 @@
     document.title = "ESTANC DEL PASSEIG · Resultados de lotería";
     const app = document.getElementById("app");
     app.textContent = "";
+    app.appendChild(enlaceVolver("Volver al inicio", "#"));
     const adorno = crear("div", "adorno");
     adorno.innerHTML = adornoNavidad();
     app.appendChild(adorno);
@@ -291,13 +367,7 @@
     const app = document.getElementById("app");
     app.textContent = "";
 
-    const volver = crear("a", "volver");
-    volver.href = "#";
-    const flecha = crear("span", "flecha", "\u2190");
-    flecha.setAttribute("aria-hidden", "true");
-    volver.appendChild(flecha);
-    volver.appendChild(document.createTextNode("Volver a los juegos"));
-    app.appendChild(volver);
+    app.appendChild(enlaceVolver("Volver a los juegos", "#resultados"));
 
     const cab = crear("div", "cabecera " + def.clase);
     cab.appendChild(crear("h1", "", def.nombre));
@@ -414,7 +484,9 @@
     if (!DATA) return;
     const id = location.hash.slice(1);
     const def = JUEGOS.find(function (j) { return j.id === id; });
-    if (def) pantallaJuego(def); else portada();
+    if (def) pantallaJuego(def);
+    else if (id === "resultados") portada();
+    else inicio();
     window.scrollTo(0, 0);
   }
 
@@ -426,7 +498,7 @@
   }
 
   // Si todavía no existe el historial, se usa el último resultado guardado
-  cargar("data/historial.json")
+  const pHistorial = cargar("data/historial.json")
     .catch(function () {
       return cargar("data/resultados.json").then(function (d) {
         const juegos = {};
@@ -436,8 +508,12 @@
         });
         return { actualizado: d.actualizado, juegos: juegos };
       });
-    })
-    .then(function (d) { DATA = d; ruta(); })
+    });
+  // Los botes son opcionales: si no se pueden cargar, el inicio avisa y sigue funcionando
+  const pBotes = cargar("data/botes.json").catch(function () { return null; });
+
+  Promise.all([pHistorial, pBotes])
+    .then(function (r) { DATA = r[0]; BOTES = r[1]; ruta(); })
     .catch(function () {
       const app = document.getElementById("app");
       app.textContent = "";
