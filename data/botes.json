@@ -1,0 +1,25 @@
+{
+  "actualizado": "2026-11-19",
+  "botes": {
+    "elgordo": {
+      "importe": "22.900.000 €",
+      "fecha": "Domingo, 22 noviembre 2026",
+      "iso": "2026-11-22"
+    },
+    "bonoloto": {
+      "importe": "700.000 €",
+      "fecha": "Jueves, 19 noviembre 2026",
+      "iso": "2026-11-19"
+    },
+    "euromillones": {
+      "importe": "37.000.000 €",
+      "fecha": "Viernes, 20 noviembre 2026",
+      "iso": "2026-11-20"
+    },
+    "eurodreams": {
+      "importe": "50.000 €",
+      "fecha": "Jueves, 19 noviembre 2026",
+      "iso": "2026-11-19"
+    }
+  }
+}
