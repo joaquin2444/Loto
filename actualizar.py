@@ -175,6 +175,35 @@ def extraer_nacional(html):
     }
 
 
+URL_BOTES = "https://www.combinacionganadora.com/botes/"
+RUTA_BOTES = "data/botes.json"
+DIA_BOTE = r"(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo),? \d{1,2} [a-záéíóúñ]+ \d{4}"
+NOMBRES_BOTE = {
+    "primitiva": r"(?<!Gordo de )(?<!Gordo de la )(?:La )?Primitiva",
+    "elgordo": r"El Gordo(?: de la Primitiva)?",
+    "bonoloto": r"Bonoloto",
+    "euromillones": r"Euromillones",
+    "eurodreams": r"Euro ?dreams",
+}
+
+
+def extraer_botes(html):
+    """Lee la lista 'Botes actualmente en juego': nombre, importe y fecha del proximo sorteo."""
+    texto = limpiar(re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S))
+    botes = {}
+    for clave, nombre in NOMBRES_BOTE.items():
+        m = re.search(
+            r"(?:" + nombre + r")\s+(\d[\d.,]*\s?M?)\s?€\s+(" + DIA_BOTE + r")",
+            texto, flags=re.I)
+        if m:
+            botes[clave] = {
+                "importe": re.sub(r"\s+", "", m.group(1)) + " €",
+                "fecha": m.group(2),
+                "iso": a_iso(m.group(2)),
+            }
+    return botes
+
+
 # Cargar el historial que ya existe
 os.makedirs("data", exist_ok=True)
 historial = {"actualizado": "", "juegos": {}}
@@ -247,3 +276,19 @@ with open(RUTA, "w", encoding="utf-8") as f:
     json.dump(historial, f, ensure_ascii=False, indent=2)
 
 print("Guardado", RUTA)
+
+# Botes de los proximos sorteos (si falla, se conserva el archivo anterior)
+try:
+    req = urllib.request.Request(URL_BOTES, headers=HEADERS)
+    with urllib.request.urlopen(req, timeout=30) as r:
+        html_botes = r.read().decode("utf-8", "replace")
+    botes_actuales = extraer_botes(html_botes)
+    if botes_actuales:
+        with open(RUTA_BOTES, "w", encoding="utf-8") as f:
+            json.dump({"actualizado": hoy.isoformat(), "botes": botes_actuales},
+                      f, ensure_ascii=False, indent=2)
+        print("Botes guardados:", {k: v["importe"] for k, v in botes_actuales.items()})
+    else:
+        print("Botes: no se encontro ninguno en la pagina")
+except Exception as e:
+    print("Botes ERROR", e)
