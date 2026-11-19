@@ -105,6 +105,15 @@ def valido(e):
     )
 
 
+def buscar_joker(texto):
+    """Busca el Joker (7 cifras) en un texto limpio, aunque venga con separadores."""
+    for m in re.finditer(r"Joker\W{0,6}((?:\d\W{0,2}){7})", texto):
+        cifras = re.sub(r"\D", "", m.group(1))
+        if len(cifras) == 7:
+            return cifras
+    return None
+
+
 def extraer(nombre, html):
     html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
 
@@ -142,8 +151,11 @@ def extraer(nombre, html):
         fechas = FECHA.findall(antes)
         fecha = fechas[-1] if fechas else None
 
-    despues = limpiar(html[m.end(): m.end() + 600])
-    joker = re.search(r"Joker\s*(\d{7})", despues)
+    # Texto que sigue a la lista de numeros (ventana amplia, ya sin etiquetas HTML)
+    despues = limpiar(html[m.end(): m.end() + 8000])[:3000]
+    joker = buscar_joker(despues) if nombre == "primitiva" else None
+    if nombre == "primitiva" and not joker:
+        print("Joker no encontrado. Texto tras los numeros:", despues[:300])
 
     return {
         "fecha": fecha,
@@ -151,7 +163,7 @@ def extraer(nombre, html):
         "numeros": numeros,
         "extras": extras,
         "etiquetas": etiquetas,
-        "joker": joker.group(1) if joker else None,
+        "joker": joker,
     }
 
 
@@ -290,6 +302,14 @@ for nombre, url in WEBS.items():
     clave = entrada["iso"] or entrada["fecha"]
 
     lista = historial["juegos"].setdefault(nombre, [])
+
+    # Si ya habia un Joker guardado para este mismo sorteo, no se pierde
+    if nombre == "primitiva" and not entrada.get("joker"):
+        for e in lista:
+            if (e.get("iso") or e.get("fecha")) == clave and e.get("joker"):
+                entrada["joker"] = e["joker"]
+                break
+
     # Quitar el mismo sorteo si ya estaba, y los demasiado antiguos
     lista[:] = [
         e for e in lista
