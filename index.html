@@ -87,20 +87,20 @@
   /* Calendario */
   .resultado .sorteo { border-bottom: 0; padding-top: 18px; }
   .resultado .fecha { font-size: 1.05rem; font-weight: 600; color: var(--texto); }
-  .calendario { margin-top: 28px; }
-  .cal-cab { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .cal-cab h2 { margin: 0; font-size: 1.05rem; }
-  .cal-nav { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--linea); background: none; color: var(--texto); font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .calendario { margin-top: 22px; max-width: 340px; }
+  .cal-cab { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .cal-cab h2 { margin: 0; font-size: 0.95rem; }
+  .cal-nav { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--linea); background: none; color: var(--texto); font: inherit; font-size: 1.25rem; line-height: 1; cursor: pointer; }
   .cal-nav:disabled { opacity: 0.3; cursor: default; }
   .cal-nav:focus-visible, .dia.con:focus-visible { outline: 3px solid var(--c); outline-offset: 2px; }
   .cal-sem, .cal-dias { display: grid; grid-template-columns: repeat(7, 1fr); }
-  .cal-sem span { text-align: center; font-size: 0.85rem; color: var(--suave); padding: 4px 0 6px; }
+  .cal-sem span { text-align: center; font-size: 0.78rem; color: var(--suave); padding: 2px 0 4px; }
   .cal-dias { border-top: 1px solid var(--linea); border-left: 1px solid var(--linea); }
-  .dia { min-height: 46px; display: grid; place-items: center; margin: 0; padding: 0; font: inherit; font-size: 1rem; color: var(--suave); opacity: 0.55; background: none; border: 0; border-right: 1px solid var(--linea); border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+  .dia { min-height: 36px; display: grid; place-items: center; margin: 0; padding: 0; font: inherit; font-size: 0.9rem; color: var(--suave); opacity: 0.55; background: none; border: 0; border-right: 1px solid var(--linea); border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
   .dia.vacio { opacity: 1; }
   .dia.con { opacity: 1; color: var(--texto); font-weight: 800; cursor: pointer; }
   .dia.con[aria-pressed="true"] { background: var(--c); color: var(--fondo); }
-  .cal-nota { margin: 10px 0 0; font-size: 0.85rem; color: var(--suave); }
+  .cal-nota { margin: 8px 0 0; font-size: 0.8rem; color: var(--suave); }
 
   /* Portada */
   .juegos { margin-top: 26px; display: grid; gap: 22px; }
@@ -115,7 +115,8 @@
   .ver { display: inline-block; margin-top: 10px; color: var(--suave); font-size: 0.9rem; }
 
   /* Pantalla de un juego */
-  .volver { display: inline-block; margin: 0 0 18px; color: var(--suave); text-decoration: none; font-size: 0.95rem; }
+  .volver { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; padding: 8px 0; color: var(--texto); text-decoration: none; font-size: 1rem; font-weight: 600; }
+  .volver .flecha { font-size: 1.3rem; line-height: 1; }
   .cabecera { padding-left: 16px; border-left: 6px solid var(--c); }
   .cabecera h1 { margin: 0; }
   h2.mes { font-size: 1.05rem; margin: 30px 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--linea); text-transform: none; }
@@ -259,8 +260,12 @@
     const app = document.getElementById("app");
     app.textContent = "";
 
-    const volver = crear("a", "volver", "Volver a los juegos");
+    const volver = crear("a", "volver");
     volver.href = "#";
+    const flecha = crear("span", "flecha", "\u2190");
+    flecha.setAttribute("aria-hidden", "true");
+    volver.appendChild(flecha);
+    volver.appendChild(document.createTextNode("Volver a los juegos"));
     app.appendChild(volver);
 
     const cab = crear("div", "cabecera " + def.clase);
