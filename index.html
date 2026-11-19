@@ -84,6 +84,24 @@
   .grupo h3 { margin: 0 0 6px; padding-bottom: 3px; font-size: 0.9rem; font-weight: 500; color: var(--suave); border-bottom: 1px dotted var(--c); }
   .grupo .nums { display: flex; flex-wrap: wrap; gap: 2px 16px; font-size: 1.25rem; font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; }
 
+  /* Calendario */
+  .resultado .sorteo { border-bottom: 0; padding-top: 18px; }
+  .resultado .fecha { font-size: 1.05rem; font-weight: 600; color: var(--texto); }
+  .calendario { margin-top: 28px; }
+  .cal-cab { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .cal-cab h2 { margin: 0; font-size: 1.05rem; }
+  .cal-nav { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--linea); background: none; color: var(--texto); font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .cal-nav:disabled { opacity: 0.3; cursor: default; }
+  .cal-nav:focus-visible, .dia.con:focus-visible { outline: 3px solid var(--c); outline-offset: 2px; }
+  .cal-sem, .cal-dias { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal-sem span { text-align: center; font-size: 0.85rem; color: var(--suave); padding: 4px 0 6px; }
+  .cal-dias { border-top: 1px solid var(--linea); border-left: 1px solid var(--linea); }
+  .dia { min-height: 46px; display: grid; place-items: center; margin: 0; padding: 0; font: inherit; font-size: 1rem; color: var(--suave); opacity: 0.55; background: none; border: 0; border-right: 1px solid var(--linea); border-bottom: 1px solid var(--linea); font-variant-numeric: tabular-nums; }
+  .dia.vacio { opacity: 1; }
+  .dia.con { opacity: 1; color: var(--texto); font-weight: 800; cursor: pointer; }
+  .dia.con[aria-pressed="true"] { background: var(--c); color: var(--fondo); }
+  .cal-nota { margin: 10px 0 0; font-size: 0.85rem; color: var(--suave); }
+
   /* Portada */
   .juegos { margin-top: 26px; display: grid; gap: 22px; }
   .juego-link {
@@ -208,11 +226,33 @@
       } else {
         a.appendChild(crear("p", "fecha", "Sin datos todavía"));
       }
-      a.appendChild(crear("span", "ver", "Ver los últimos 3 meses"));
+      a.appendChild(crear("span", "ver", "Ver sorteos anteriores"));
       cont.appendChild(a);
     });
     app.appendChild(cont);
   }
+
+  function bloqueSorteo(s) {
+    const bloque = crear("div", "sorteo");
+    bloque.appendChild(crear("p", "fecha", s.fecha || ""));
+    if (s.primero) {
+      bloque.appendChild(premios(s));
+      [["Últimas 4 cifras", s.cifras4], ["Últimas 3 cifras", s.cifras3],
+       ["Últimas 2 cifras", s.cifras2], ["Reintegros", s.reintegros]].forEach(function (g) {
+        const el = grupo(g[0], g[1]);
+        if (el) bloque.appendChild(el);
+      });
+    } else {
+      bloque.appendChild(bolas(s.numeros));
+      const ex = extras(s);
+      if (ex) bloque.appendChild(ex);
+    }
+    return bloque;
+  }
+
+  const DIAS_SEMANA = ["L", "M", "M", "J", "V", "S", "D"];
+
+  function dos(n) { return (n < 10 ? "0" : "") + n; }
 
   function pantallaJuego(def) {
     document.title = def.nombre + " · Resultados";
@@ -234,34 +274,104 @@
     }
 
     const caja = crear("div", def.clase);
-    let mesActual = null;
-    lista.forEach(function (s) {
-      let mes = "Sin fecha";
-      if (s.iso) {
-        const p = s.iso.split("-");
-        mes = MESES[parseInt(p[1], 10) - 1] + " de " + p[0];
-      }
-      if (mes !== mesActual) {
-        caja.appendChild(crear("h2", "mes", mes));
-        mesActual = mes;
-      }
-      const bloque = crear("div", "sorteo");
-      bloque.appendChild(crear("p", "fecha", s.fecha || ""));
-      if (s.primero) {
-        bloque.appendChild(premios(s));
-        [["Últimas 4 cifras", s.cifras4], ["Últimas 3 cifras", s.cifras3],
-         ["Últimas 2 cifras", s.cifras2], ["Reintegros", s.reintegros]].forEach(function (g) {
-          const el = grupo(g[0], g[1]);
-          if (el) bloque.appendChild(el);
-        });
-      } else {
-        bloque.appendChild(bolas(s.numeros));
-        const ex = extras(s);
-        if (ex) bloque.appendChild(ex);
-      }
-      caja.appendChild(bloque);
-    });
     app.appendChild(caja);
+
+    // Sorteos con fecha, por día
+    const porIso = {};
+    lista.forEach(function (s) { if (s.iso && !porIso[s.iso]) porIso[s.iso] = s; });
+    const dias = Object.keys(porIso).sort();
+
+    const ultimo = lista[0];
+    const est = { actual: ultimo, iso: ultimo.iso || null, anio: 0, mes: 0 };
+    if (est.iso) {
+      const p = est.iso.split("-");
+      est.anio = parseInt(p[0], 10);
+      est.mes = parseInt(p[1], 10) - 1;
+    }
+
+    const resultado = crear("div", "resultado");
+    resultado.setAttribute("aria-live", "polite");
+    caja.appendChild(resultado);
+
+    const calDiv = crear("div", "calendario");
+    if (dias.length) caja.appendChild(calDiv);
+
+    const claveMes = function (a, m) { return a + "-" + dos(m + 1); };
+    const primeraClave = dias.length ? dias[0].slice(0, 7) : "";
+    const ultimaClave = dias.length ? dias[dias.length - 1].slice(0, 7) : "";
+
+    function pintarResultado() {
+      resultado.textContent = "";
+      resultado.appendChild(bloqueSorteo(est.actual));
+    }
+
+    function elegir(iso) {
+      est.iso = iso;
+      est.actual = porIso[iso];
+      pintarResultado();
+      pintarCalendario();
+      const sel = calDiv.querySelector('[aria-pressed="true"]');
+      if (sel) sel.focus({ preventScroll: true });
+      const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      resultado.scrollIntoView({ behavior: quieto ? "auto" : "smooth", block: "start" });
+    }
+
+    function cambiarMes(delta) {
+      const f = new Date(est.anio, est.mes + delta, 1);
+      est.anio = f.getFullYear();
+      est.mes = f.getMonth();
+      pintarCalendario();
+    }
+
+    function pintarCalendario() {
+      calDiv.textContent = "";
+      const clave = claveMes(est.anio, est.mes);
+
+      const cabCal = crear("div", "cal-cab");
+      const ant = crear("button", "cal-nav", "\u2039");
+      ant.type = "button";
+      ant.setAttribute("aria-label", "Mes anterior");
+      ant.disabled = clave <= primeraClave;
+      ant.addEventListener("click", function () { cambiarMes(-1); });
+      const sig = crear("button", "cal-nav", "\u203A");
+      sig.type = "button";
+      sig.setAttribute("aria-label", "Mes siguiente");
+      sig.disabled = clave >= ultimaClave;
+      sig.addEventListener("click", function () { cambiarMes(1); });
+      const titulo = MESES[est.mes] + " de " + est.anio;
+      cabCal.appendChild(ant);
+      cabCal.appendChild(crear("h2", "", titulo.charAt(0).toUpperCase() + titulo.slice(1)));
+      cabCal.appendChild(sig);
+      calDiv.appendChild(cabCal);
+
+      const sem = crear("div", "cal-sem");
+      sem.setAttribute("aria-hidden", "true");
+      DIAS_SEMANA.forEach(function (d) { sem.appendChild(crear("span", "", d)); });
+      calDiv.appendChild(sem);
+
+      const rejilla = crear("div", "cal-dias");
+      const hueco = (new Date(est.anio, est.mes, 1).getDay() + 6) % 7;
+      const total = new Date(est.anio, est.mes + 1, 0).getDate();
+      for (let i = 0; i < hueco; i++) rejilla.appendChild(crear("span", "dia vacio"));
+      for (let d = 1; d <= total; d++) {
+        const iso = est.anio + "-" + dos(est.mes + 1) + "-" + dos(d);
+        if (porIso[iso]) {
+          const b = crear("button", "dia con", String(d));
+          b.type = "button";
+          b.setAttribute("aria-pressed", iso === est.iso ? "true" : "false");
+          b.setAttribute("aria-label", porIso[iso].fecha || iso);
+          b.addEventListener("click", function () { elegir(iso); });
+          rejilla.appendChild(b);
+        } else {
+          rejilla.appendChild(crear("span", "dia", String(d)));
+        }
+      }
+      calDiv.appendChild(rejilla);
+      calDiv.appendChild(crear("p", "cal-nota", "Los días en negrita tienen resultado guardado."));
+    }
+
+    pintarResultado();
+    if (dias.length) pintarCalendario();
   }
 
   function ruta() {
