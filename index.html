@@ -116,14 +116,17 @@
   .botes { margin-top: 22px; display: grid; gap: 10px; }
   .botes h2 { margin: 0 0 2px; font-size: 1.05rem; }
   .bote {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px;
     padding: 12px 14px 12px 16px; border-left: 6px solid var(--c); border-radius: 0 14px 14px 0;
     background: var(--fondo);
     background: color-mix(in srgb, var(--c) var(--tinte), var(--fondo));
   }
+  .bote .izq { flex: 1 1 auto; min-width: 0; }
   .bote .nombre { font-weight: 700; }
   .bote .cuando { display: block; margin-top: 2px; font-size: 0.85rem; color: var(--suave); }
-  .bote .importe { font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bote .importe { flex: 0 0 auto; margin-left: auto; text-align: right; }
+  .bote .cifra { display: block; font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bote .peque { display: block; font-size: 0.75rem; font-weight: 600; color: var(--suave); }
   .consultar {
     display: flex; align-items: center; justify-content: space-between;
     margin-top: 26px; padding: 20px 22px; border-radius: 16px;
@@ -166,15 +169,16 @@
 
 <script>
   const JUEGOS = [
-    { id: "primitiva", nombre: "La Primitiva", clase: "c-prim" },
-    { id: "elgordo", nombre: "El Gordo de la Primitiva", clase: "c-gordo" },
-    { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono" },
-    { id: "euromillones", nombre: "Euromillones", clase: "c-euro" },
-    { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream" },
-    { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional" }
+    { id: "primitiva", nombre: "La Primitiva", clase: "c-prim", dias: [4, 6] },
+    { id: "elgordo", nombre: "El Gordo de la Primitiva", clase: "c-gordo", dias: [0] },
+    { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono", dias: [1, 2, 3, 4, 5, 6] },
+    { id: "euromillones", nombre: "Euromillones", clase: "c-euro", dias: [2, 5] },
+    { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream", dias: [1, 4], nota: "al mes durante 30 años" },
+    { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional", sinInicio: true }
   ];
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  const DIAS_CORTOS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
   let DATA = null;
   let BOTES = null;
 
@@ -239,6 +243,28 @@
     return a;
   }
 
+  function dos(n) { return (n < 10 ? "0" : "") + n; }
+
+  // "2026-11-19" -> "Jue 19 nov"
+  function fechaCorta(iso) {
+    const f = new Date(iso + "T12:00:00");
+    if (isNaN(f)) return "";
+    return DIAS_CORTOS[f.getDay()] + " " + f.getDate() + " " + MESES[f.getMonth()].slice(0, 3);
+  }
+
+  // Si no hay fecha de bote, se calcula el próximo día de sorteo del juego
+  function proximoSorteo(def) {
+    if (!def.dias) return "";
+    const hoy = new Date();
+    for (let i = 0; i < 8; i++) {
+      const f = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + i);
+      if (def.dias.indexOf(f.getDay()) !== -1) {
+        return f.getFullYear() + "-" + dos(f.getMonth() + 1) + "-" + dos(f.getDate());
+      }
+    }
+    return "";
+  }
+
   function inicio() {
     document.title = "ESTANC DEL PASSEIG";
     const app = document.getElementById("app");
@@ -251,23 +277,34 @@
     const caja = crear("section", "botes");
     caja.appendChild(crear("h2", "", "Botes de los próximos sorteos"));
     const lista = [];
-    if (BOTES && BOTES.botes) {
-      JUEGOS.forEach(function (def) {
-        const b = BOTES.botes[def.id];
-        if (b && b.importe) lista.push({ def: def, b: b });
+    JUEGOS.forEach(function (def, orden) {
+      if (def.sinInicio) return;
+      const b = BOTES && BOTES.botes && BOTES.botes[def.id];
+      const iso = (b && b.iso) || proximoSorteo(def);
+      lista.push({
+        def: def,
+        orden: orden,
+        iso: iso,
+        importe: b && b.importe ? b.importe : "",
+        fechaTexto: b && b.fecha ? b.fecha : ""
       });
-      lista.sort(function (x, y) { return (x.b.iso || "9999").localeCompare(y.b.iso || "9999"); });
-    }
-    if (!lista.length) {
-      caja.appendChild(crear("p", "aviso", "Los botes no están disponibles ahora mismo."));
-    }
+    });
+    lista.sort(function (x, y) {
+      return (x.iso || "9999").localeCompare(y.iso || "9999") || x.orden - y.orden;
+    });
     lista.forEach(function (x) {
       const fila = crear("div", "bote " + x.def.clase);
-      const izq = crear("div", "");
+      const izq = crear("div", "izq");
       izq.appendChild(crear("span", "nombre", x.def.nombre));
-      izq.appendChild(crear("span", "cuando", x.b.fecha || ""));
+      const cuando = x.iso ? fechaCorta(x.iso) : x.fechaTexto;
+      if (cuando) izq.appendChild(crear("span", "cuando", cuando));
       fila.appendChild(izq);
-      fila.appendChild(crear("span", "importe", x.b.importe));
+      if (x.importe) {
+        const imp = crear("div", "importe");
+        imp.appendChild(crear("span", "cifra", x.importe));
+        if (x.def.nota) imp.appendChild(crear("span", "peque", x.def.nota));
+        fila.appendChild(imp);
+      }
       caja.appendChild(fila);
     });
     app.appendChild(caja);
@@ -359,8 +396,6 @@
   }
 
   const DIAS_SEMANA = ["L", "M", "M", "J", "V", "S", "D"];
-
-  function dos(n) { return (n < 10 ? "0" : "") + n; }
 
   function pantallaJuego(def) {
     document.title = def.nombre + " · Resultados";
@@ -509,7 +544,7 @@
         return { actualizado: d.actualizado, juegos: juegos };
       });
     });
-  // Los botes son opcionales: si no se pueden cargar, el inicio avisa y sigue funcionando
+  // Los botes son opcionales: si no se pueden cargar, el inicio muestra los juegos sin importe
   const pBotes = cargar("data/botes.json").catch(function () { return null; });
 
   Promise.all([pHistorial, pBotes])
