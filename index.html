@@ -17,6 +17,8 @@
     --dream: #7a3f9e;
     --gordo: #0f7c8a;
     --nacional: #6c6794;
+    --rojo: #c8102e;
+    --tinte: 14%;
     --estrella: #f2b01e;
   }
   @media (prefers-color-scheme: dark) {
@@ -31,6 +33,8 @@
       --dream: #b684d8;
       --gordo: #43b8c6;
       --nacional: #a9a3d6;
+      --rojo: #ff7a6b;
+      --tinte: 24%;
     }
   }
   * { box-sizing: border-box; }
@@ -44,7 +48,13 @@
   }
   main { max-width: 560px; margin: 0 auto; padding: 28px 20px 48px; }
   h1 { font-size: 1.9rem; margin: 0 0 4px; letter-spacing: -0.01em; }
-  h1.marca { font-size: 1.65rem; letter-spacing: 0.03em; line-height: 1.15; margin: 0 0 6px; }
+  h1.marca { font-size: 1.65rem; letter-spacing: 0.03em; line-height: 1.15; margin: 0 0 6px; color: var(--rojo); }
+  .adorno { margin: 0 0 8px; color: var(--suave); }
+  .adorno svg { display: block; width: 100%; max-width: 360px; height: auto; }
+  @keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .adorno .impar { animation: parpadeo 2.6s ease-in-out infinite; }
+  .adorno .par { animation: parpadeo 2.6s ease-in-out 1.3s infinite; }
+  @media (prefers-reduced-motion: reduce) { .adorno .impar, .adorno .par { animation: none; } }
   .subtitulo { margin: 0 0 2px; font-size: 1.1rem; font-weight: 600; }
   .actualizado { margin: 0 0 8px; color: var(--suave); font-size: 0.95rem; }
   .aviso { color: var(--suave); }
@@ -103,11 +113,15 @@
   .cal-nota { margin: 8px 0 0; font-size: 0.8rem; color: var(--suave); }
 
   /* Portada */
-  .juegos { margin-top: 26px; display: grid; gap: 22px; }
+  .juegos { margin-top: 22px; display: grid; gap: 14px; }
   .juego-link {
     display: block; text-decoration: none;
-    padding: 4px 0 4px 16px; border-left: 6px solid var(--c);
+    padding: 16px 16px 16px 16px; border-left: 6px solid var(--c);
+    border-radius: 0 14px 14px 0;
+    background: var(--fondo);
+    background: color-mix(in srgb, var(--c) var(--tinte), var(--fondo));
   }
+  .juego-link:active { background: color-mix(in srgb, var(--c) 28%, var(--fondo)); }
   .juego-link:focus-visible, .volver:focus-visible { outline: 3px solid var(--c, var(--texto)); outline-offset: 4px; }
   .juego-link h2 { font-size: 1.3rem; margin: 0; }
   .juego-link .fecha { margin: 2px 0 12px; color: var(--suave); font-size: 0.95rem; }
@@ -192,6 +206,20 @@
     return g;
   }
 
+  function adornoNavidad() {
+    const colores = ["#d62839", "#f2b01e", "#2fa468", "#4a90e2"];
+    let luces = "";
+    for (let i = 0; i < 6; i++) {
+      const x = 30 + i * 60;
+      luces += '<g class="luz ' + (i % 2 ? "par" : "impar") + '">' +
+        '<line x1="' + x + '" y1="15" x2="' + x + '" y2="20" stroke="currentColor" stroke-width="1.5"/>' +
+        '<ellipse cx="' + x + '" cy="26" rx="4.5" ry="6" fill="' + colores[i % colores.length] + '"/></g>';
+    }
+    return '<svg viewBox="0 0 360 34" aria-hidden="true" focusable="false">' +
+      '<path d="M0 4 Q30 26 60 4 Q90 26 120 4 Q150 26 180 4 Q210 26 240 4 Q270 26 300 4 Q330 26 360 4" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.5"/>' + luces + '</svg>';
+  }
+
   function sorteosDe(id) {
     const lista = DATA.juegos && DATA.juegos[id];
     return Array.isArray(lista) ? lista : [];
@@ -201,6 +229,9 @@
     document.title = "ESTANC DEL PASSEIG · Resultados de lotería";
     const app = document.getElementById("app");
     app.textContent = "";
+    const adorno = crear("div", "adorno");
+    adorno.innerHTML = adornoNavidad();
+    app.appendChild(adorno);
     app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
     app.appendChild(crear("p", "subtitulo", "Resultados de lotería"));
     if (DATA.actualizado) {
