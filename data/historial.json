@@ -3,6 +3,27 @@
   "juegos": {
     "primitiva": [
       {
+        "iso": "2026-11-19",
+        "fecha": "Jueves, 19 noviembre 2026",
+        "numeros": [
+          "20",
+          "23",
+          "36",
+          "41",
+          "44",
+          "49"
+        ],
+        "extras": [
+          "C 34",
+          "R 3"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
+      {
         "iso": "2026-11-16",
         "fecha": "Lunes, 16 noviembre 2026",
         "numeros": [
@@ -25,6 +46,27 @@
       }
     ],
     "bonoloto": [
+      {
+        "iso": "2026-11-19",
+        "fecha": "Jueves, 19 noviembre 2026",
+        "numeros": [
+          "10",
+          "24",
+          "34",
+          "36",
+          "41",
+          "46"
+        ],
+        "extras": [
+          "C 16",
+          "R 2"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-18",
         "fecha": "Miércoles, 18 noviembre 2026",
@@ -90,6 +132,25 @@
     ],
     "eurodreams": [
       {
+        "iso": "2026-11-19",
+        "fecha": "Jueves, 19 noviembre 2026",
+        "numeros": [
+          "5",
+          "8",
+          "18",
+          "24",
+          "27",
+          "39"
+        ],
+        "extras": [
+          "S 2"
+        ],
+        "etiquetas": {
+          "S": "Sueño"
+        },
+        "joker": null
+      },
+      {
         "iso": "2026-11-16",
         "fecha": "Lunes, 16 noviembre 2026",
         "numeros": [
@@ -110,6 +171,43 @@
       }
     ],
     "loterianacional": [
+      {
+        "iso": "2026-11-19",
+        "fecha": "Jueves, 19 noviembre 2026",
+        "primero": "51.664",
+        "segundo": "68.523",
+        "cifras4": [
+          "2316",
+          "4388",
+          "7198",
+          "8580"
+        ],
+        "cifras3": [
+          "017",
+          "379",
+          "448",
+          "545",
+          "684",
+          "725",
+          "904"
+        ],
+        "cifras2": [
+          "25",
+          "27",
+          "28",
+          "55",
+          "70",
+          "72",
+          "78",
+          "82",
+          "87"
+        ],
+        "reintegros": [
+          "0",
+          "4",
+          "6"
+        ]
+      },
       {
         "iso": "2026-11-14",
         "fecha": "Sábado, 14 noviembre 2026",
