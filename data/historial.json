@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-19",
+  "actualizado": "2026-11-20",
   "juegos": {
     "primitiva": [
       {
@@ -21,7 +21,7 @@
           "C": "Complementario",
           "R": "Reintegro"
         },
-        "joker": null
+        "joker": "0452653"
       },
       {
         "iso": "2026-11-16",
