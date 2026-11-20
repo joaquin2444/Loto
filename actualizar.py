@@ -11,6 +11,8 @@ WEBS = {
     "bonoloto": "https://www.combinacionganadora.com/bonoloto/",
     "euromillones": "https://www.combinacionganadora.com/euromillones/",
     "eurodreams": "https://www.combinacionganadora.com/eurodreams/",
+    "quiniela": "https://www.combinacionganadora.com/quiniela/",
+    "lototurf": "https://www.combinacionganadora.com/lototurf/",
     "loterianacional": [
         "https://www.combinacionganadora.com/loterianacional/",
         "https://www.combinacionganadora.com/loteria-nacional/",
@@ -100,7 +102,7 @@ def valido(e):
     extras = e.get("extras") or []
     return (
         len(numeros) > 0
-        and all(re.fullmatch(r"\d+", str(n)) for n in numeros)
+        and all(re.fullmatch(r"\d+|X", str(n)) for n in numeros)
         and all(re.fullmatch(r"[A-Z]\s*\d+", str(x)) for x in extras)
     )
 
@@ -141,6 +143,9 @@ def extraer(nombre, html):
                 etiquetas[letra.group(1)] = titulo.group(1)
         else:
             numeros.append(valor)
+
+    if nombre == "lototurf":
+        etiquetas = {"C": "Caballo", "R": "Reintegro"}
 
     antes = limpiar(html[max(0, m.start() - 3000): m.start()])
     con_dia = FECHA_DIA.findall(antes)
@@ -216,6 +221,39 @@ def extraer_nacional(html):
     }
 
 
+DIAS_LARGOS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+MESES_LARGOS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+                "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+
+
+def fecha_larga(iso):
+    d = date.fromisoformat(iso)
+    return "%s, %d %s %d" % (DIAS_LARGOS[d.weekday()], d.day, MESES_LARGOS[d.month - 1], d.year)
+
+
+def extraer_quiniela(html):
+    """Lee los 14 signos y el Pleno al 15 de la descripcion de la pagina."""
+    m = re.search(
+        r"Quiniela\s+(?:[a-záéíóúñ]+\s+)?(\d{1,2} de [a-záéíóúñ]+ de \d{4}):\s*"
+        r"((?:[12Xx]\s*,\s*){13}[12Xx])\.?\s*P15:\s*([0-2Mm])\s*-\s*([0-2Mm])",
+        html, flags=re.I)
+    if not m:
+        return {"error": "no se encontro la combinacion de la quiniela"}
+    iso = a_iso(m.group(1))
+    if not iso:
+        return {"error": "fecha de la quiniela no valida"}
+    signos = [x.strip().upper() for x in m.group(2).split(",")]
+    return {
+        "fecha": fecha_larga(iso),
+        "iso": iso,
+        "numeros": signos,
+        "extras": [],
+        "etiquetas": {},
+        "joker": None,
+        "pleno": m.group(3).upper() + "-" + m.group(4).upper(),
+    }
+
+
 URL_BOTES = "https://www.combinacionganadora.com/botes/"
 RUTA_BOTES = "data/botes.json"
 DIA_BOTE = r"(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo),? \d{1,2} [a-záéíóúñ]+ \d{4}"
@@ -225,6 +263,8 @@ NOMBRES_BOTE = {
     "bonoloto": r"Bonoloto",
     "euromillones": r"Euromillones",
     "eurodreams": r"Euro ?dreams",
+    "quiniela": r"(?:La )?Quiniela",
+    "lototurf": r"Lototurf",
 }
 
 
@@ -276,7 +316,12 @@ for nombre, url in WEBS.items():
         continue
 
     es_nacional = nombre == "loterianacional"
-    datos = extraer_nacional(html) if es_nacional else extraer(nombre, html)
+    if es_nacional:
+        datos = extraer_nacional(html)
+    elif nombre == "quiniela":
+        datos = extraer_quiniela(html)
+    else:
+        datos = extraer(nombre, html)
 
     if "error" in datos:
         print(nombre, "sin datos:", datos["error"])
@@ -298,6 +343,8 @@ for nombre, url in WEBS.items():
             "etiquetas": datos.get("etiquetas", {}),
             "joker": datos["joker"],
         }
+    if datos.get("pleno"):
+        entrada["pleno"] = datos["pleno"]
     clave = entrada["iso"] or entrada["fecha"]
 
     lista = historial["juegos"].setdefault(nombre, [])
