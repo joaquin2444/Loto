@@ -11,20 +11,25 @@
       "fecha": "Domingo, 22 noviembre 2026",
       "iso": "2026-11-22"
     },
-    "bonoloto": {
-      "importe": "1.200.000 €",
-      "fecha": "Viernes, 20 noviembre 2026",
-      "iso": "2026-11-20"
-    },
     "euromillones": {
-      "importe": "37.000.000 €",
-      "fecha": "Viernes, 20 noviembre 2026",
-      "iso": "2026-11-20"
+      "importe": "46.000.000 €",
+      "fecha": "Martes, 24 noviembre 2026",
+      "iso": "2026-11-24"
     },
     "eurodreams": {
       "importe": "50.000 €",
       "fecha": "Lunes, 23 noviembre 2026",
       "iso": "2026-11-23"
+    },
+    "quiniela": {
+      "importe": "1.000.000 €",
+      "fecha": "Domingo, 22 noviembre 2026",
+      "iso": "2026-11-22"
+    },
+    "lototurf": {
+      "importe": "1.950.000 €",
+      "fecha": "Domingo, 22 noviembre 2026",
+      "iso": "2026-11-22"
     }
   }
 }

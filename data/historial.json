@@ -47,6 +47,27 @@
     ],
     "bonoloto": [
       {
+        "iso": "2026-11-20",
+        "fecha": "Viernes, 20 noviembre 2026",
+        "numeros": [
+          "4",
+          "11",
+          "17",
+          "25",
+          "37",
+          "48"
+        ],
+        "extras": [
+          "C 43",
+          "R 8"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
+      {
         "iso": "2026-11-19",
         "fecha": "Jueves, 19 noviembre 2026",
         "numeros": [
@@ -90,6 +111,25 @@
       }
     ],
     "euromillones": [
+      {
+        "iso": "2026-11-20",
+        "fecha": "Viernes, 20 noviembre 2026",
+        "numeros": [
+          "8",
+          "21",
+          "24",
+          "36",
+          "49"
+        ],
+        "extras": [
+          "E 1",
+          "E 8"
+        ],
+        "etiquetas": {
+          "E": "Estrellas"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-17",
         "fecha": "Martes, 17 noviembre 2026",
@@ -247,6 +287,55 @@
           "4",
           "9"
         ]
+      }
+    ],
+    "quiniela": [
+      {
+        "iso": "2026-11-18",
+        "fecha": "Miércoles, 18 noviembre 2026",
+        "numeros": [
+          "1",
+          "1",
+          "2",
+          "X",
+          "X",
+          "1",
+          "1",
+          "2",
+          "1",
+          "1",
+          "2",
+          "2",
+          "1",
+          "2"
+        ],
+        "extras": [],
+        "etiquetas": {},
+        "joker": null,
+        "pleno": "2-M"
+      }
+    ],
+    "lototurf": [
+      {
+        "iso": "2026-11-15",
+        "fecha": "Domingo, 15 noviembre 2026",
+        "numeros": [
+          "9",
+          "18",
+          "22",
+          "24",
+          "30",
+          "31"
+        ],
+        "extras": [
+          "C 6",
+          "R 8"
+        ],
+        "etiquetas": {
+          "C": "Caballo",
+          "R": "Reintegro"
+        },
+        "joker": null
       }
     ]
   }
