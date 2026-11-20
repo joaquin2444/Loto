@@ -270,9 +270,6 @@
     document.title = "ESTANC DEL PASSEIG";
     const app = document.getElementById("app");
     app.textContent = "";
-    const adorno = crear("div", "adorno");
-    adorno.innerHTML = adornoNavidad();
-    app.appendChild(adorno);
     app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
 
     const caja = crear("section", "botes");
@@ -347,9 +344,6 @@
     const app = document.getElementById("app");
     app.textContent = "";
     app.appendChild(enlaceVolver("Volver al inicio", "#"));
-    const adorno = crear("div", "adorno");
-    adorno.innerHTML = adornoNavidad();
-    app.appendChild(adorno);
     app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
     app.appendChild(crear("p", "subtitulo", "Resultados de lotería"));
     if (DATA.actualizado) {
