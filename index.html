@@ -309,8 +309,10 @@
         fechaTexto: b && b.fecha ? b.fecha : ""
       });
     });
+    const ORDEN_INICIO = ["euromillones", "primitiva", "bonoloto", "elgordo",
+                          "eurodreams", "loterianacional", "lototurf", "quiniela"];
     lista.sort(function (x, y) {
-      return (x.iso || "9999").localeCompare(y.iso || "9999") || x.orden - y.orden;
+      return ORDEN_INICIO.indexOf(x.def.id) - ORDEN_INICIO.indexOf(y.def.id);
     });
     lista.forEach(function (x) {
       const fila = crear("div", "bote " + x.def.clase);
