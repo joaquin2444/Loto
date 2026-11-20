@@ -174,7 +174,8 @@
     { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono", dias: [1, 2, 3, 4, 5, 6] },
     { id: "euromillones", nombre: "Euromillones", clase: "c-euro", dias: [2, 5] },
     { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream", dias: [1, 4], nota: "al mes durante 30 años" },
-    { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional", sinInicio: true }
+    { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional", dias: [4, 6],
+      fijos: { 4: "300.000 €", 6: "600.000 €" }, nota: "1er premio a la serie" }
   ];
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -281,11 +282,15 @@
       if (def.sinInicio) return;
       const b = BOTES && BOTES.botes && BOTES.botes[def.id];
       const iso = (b && b.iso) || proximoSorteo(def);
+      let importe = b && b.importe ? b.importe : "";
+      if (def.fijos && iso) {
+        importe = def.fijos[new Date(iso + "T12:00:00").getDay()] || "";
+      }
       lista.push({
         def: def,
         orden: orden,
         iso: iso,
-        importe: b && b.importe ? b.importe : "",
+        importe: importe,
         fechaTexto: b && b.fecha ? b.fecha : ""
       });
     });
