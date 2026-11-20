@@ -106,11 +106,10 @@ def valido(e):
 
 
 def buscar_joker(texto):
-    """Busca el Joker (7 cifras) en un texto limpio, aunque venga con separadores."""
-    for m in re.finditer(r"Joker\W{0,6}((?:\d\W{0,2}){7})", texto):
-        cifras = re.sub(r"\D", "", m.group(1))
-        if len(cifras) == 7:
-            return cifras
+    """Busca el Joker en un texto limpio. Son 7 cifras; si la web quita el cero inicial
+    y vienen 6, se completa con un cero delante."""
+    for m in re.finditer(r"Joker\W{0,6}(\d{6,7})(?!\d)", texto):
+        return m.group(1).zfill(7)
     return None
 
 
