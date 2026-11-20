@@ -17,6 +17,8 @@
     --dream: #7a3f9e;
     --gordo: #0f7c8a;
     --nacional: #6c6794;
+    --quin: #a0762a;
+    --turf: #8a5a2b;
     --rojo: #c8102e;
     --tinte: 14%;
     --estrella: #f2b01e;
@@ -33,6 +35,8 @@
       --dream: #b684d8;
       --gordo: #43b8c6;
       --nacional: #a9a3d6;
+      --quin: #d9a84a;
+      --turf: #c08a55;
       --rojo: #ff7a6b;
       --tinte: 24%;
     }
@@ -67,6 +71,8 @@
   .c-dream { --c: var(--dream); }
   .c-gordo { --c: var(--gordo); }
   .c-nacional { --c: var(--nacional); }
+  .c-quin { --c: var(--quin); }
+  .c-turf { --c: var(--turf); }
 
   /* Bolas */
   .bolas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -123,13 +129,14 @@
   }
   .bote .izq { flex: 1 1 auto; min-width: 0; }
   .bote .nombre { font-weight: 700; }
+  .bote .sub { display: block; font-size: 0.8rem; font-weight: 600; color: var(--suave); line-height: 1.2; }
   .bote .cuando { display: block; margin-top: 2px; font-size: 0.85rem; color: var(--suave); }
   .bote .importe { flex: 0 0 auto; margin-left: auto; text-align: right; }
   .bote .cifra { display: block; font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .bote .peque { display: block; font-size: 0.75rem; font-weight: 600; color: var(--suave); }
   .consultar {
     display: flex; align-items: center; justify-content: space-between;
-    margin-top: 26px; padding: 20px 22px; border-radius: 16px;
+    margin-top: 14px; padding: 20px 22px; border-radius: 16px;
     background: var(--rojo); color: var(--fondo);
     font-size: 1.25rem; font-weight: 800; text-decoration: none;
   }
@@ -170,12 +177,14 @@
 <script>
   const JUEGOS = [
     { id: "primitiva", nombre: "La Primitiva", clase: "c-prim", dias: [4, 6] },
-    { id: "elgordo", nombre: "El Gordo de la Primitiva", clase: "c-gordo", dias: [0] },
+    { id: "elgordo", nombre: "El Gordo de la Primitiva", corto: "El Gordo", sub: "de la Primitiva", clase: "c-gordo", dias: [0] },
     { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono", dias: [1, 2, 3, 4, 5, 6] },
     { id: "euromillones", nombre: "Euromillones", clase: "c-euro", dias: [2, 5] },
     { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream", dias: [1, 4], nota: "al mes durante 30 años" },
     { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional", dias: [4, 6],
-      fijos: { 4: "300.000 €", 6: "600.000 €" }, nota: "1er premio a la serie" }
+      fijos: { 4: "300.000 €", 6: "600.000 €" }, nota: "1er premio a la serie" },
+    { id: "quiniela", nombre: "La Quiniela", clase: "c-quin", dias: [0] },
+    { id: "lototurf", nombre: "Lototurf", clase: "c-turf", dias: [0] }
   ];
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
                  "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -210,6 +219,7 @@
     });
     if (estrellas.length) cont.appendChild(crear("span", "chip estrellas", "Estrellas " + estrellas.join(" y ")));
     if (s.joker) cont.appendChild(crear("span", "chip", "Joker " + s.joker));
+    if (s.pleno) cont.appendChild(crear("span", "chip", "Pleno al 15: " + s.pleno));
     return cont.children.length ? cont : null;
   }
 
@@ -272,6 +282,14 @@
     app.textContent = "";
     app.appendChild(crear("h1", "marca", "ESTANC DEL PASSEIG"));
 
+    const ir = crear("a", "consultar");
+    ir.href = "#resultados";
+    ir.appendChild(crear("span", "", "Consultar resultados"));
+    const fl = crear("span", "flecha", "\u2192");
+    fl.setAttribute("aria-hidden", "true");
+    ir.appendChild(fl);
+    app.appendChild(ir);
+
     const caja = crear("section", "botes");
     caja.appendChild(crear("h2", "", "Botes de los próximos sorteos"));
     const lista = [];
@@ -297,7 +315,8 @@
     lista.forEach(function (x) {
       const fila = crear("div", "bote " + x.def.clase);
       const izq = crear("div", "izq");
-      izq.appendChild(crear("span", "nombre", x.def.nombre));
+      izq.appendChild(crear("span", "nombre", x.def.corto || x.def.nombre));
+      if (x.def.sub) izq.appendChild(crear("span", "sub", x.def.sub));
       const cuando = x.iso ? fechaCorta(x.iso) : x.fechaTexto;
       if (cuando) izq.appendChild(crear("span", "cuando", cuando));
       fila.appendChild(izq);
@@ -310,14 +329,6 @@
       caja.appendChild(fila);
     });
     app.appendChild(caja);
-
-    const ir = crear("a", "consultar");
-    ir.href = "#resultados";
-    ir.appendChild(crear("span", "", "Consultar resultados"));
-    const fl = crear("span", "flecha", "\u2192");
-    fl.setAttribute("aria-hidden", "true");
-    ir.appendChild(fl);
-    app.appendChild(ir);
   }
 
   function adornoNavidad() {
