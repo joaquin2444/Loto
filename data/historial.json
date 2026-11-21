@@ -3,6 +3,27 @@
   "juegos": {
     "primitiva": [
       {
+        "iso": "2026-11-21",
+        "fecha": "Sábado, 21 noviembre 2026",
+        "numeros": [
+          "7",
+          "12",
+          "13",
+          "22",
+          "29",
+          "39"
+        ],
+        "extras": [
+          "C 15",
+          "R 2"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
+      {
         "iso": "2026-11-19",
         "fecha": "Jueves, 19 noviembre 2026",
         "numeros": [
@@ -46,6 +67,27 @@
       }
     ],
     "bonoloto": [
+      {
+        "iso": "2026-11-21",
+        "fecha": "Sábado, 21 noviembre 2026",
+        "numeros": [
+          "2",
+          "6",
+          "7",
+          "8",
+          "13",
+          "46"
+        ],
+        "extras": [
+          "C 30",
+          "R 8"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-20",
         "fecha": "Viernes, 20 noviembre 2026",
@@ -211,6 +253,46 @@
       }
     ],
     "loterianacional": [
+      {
+        "iso": "2026-11-21",
+        "fecha": "Sábado, 21 noviembre 2026",
+        "primero": "23.641",
+        "segundo": "26.323",
+        "cifras4": [
+          "3410",
+          "6111",
+          "8460",
+          "9411"
+        ],
+        "cifras3": [
+          "185",
+          "346",
+          "431",
+          "483",
+          "509",
+          "540",
+          "673",
+          "758",
+          "957",
+          "997"
+        ],
+        "cifras2": [
+          "07",
+          "09",
+          "16",
+          "20",
+          "25",
+          "31",
+          "57",
+          "60",
+          "88"
+        ],
+        "reintegros": [
+          "0",
+          "1",
+          "7"
+        ]
+      },
       {
         "iso": "2026-11-19",
         "fecha": "Jueves, 19 noviembre 2026",
