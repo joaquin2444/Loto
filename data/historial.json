@@ -107,6 +107,61 @@
     ],
     "bonoloto": [
       {
+        "iso": "2026-11-22",
+        "fecha": "Domingo, 22 noviembre 2026",
+        "numeros": [
+          "3",
+          "4",
+          "12",
+          "20",
+          "26",
+          "36"
+        ],
+        "extras": [
+          "C 1",
+          "R 5"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "1",
+            "premio": "116.699,24 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "66",
+            "premio": "884,09 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "3718",
+            "premio": "23,54 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "69896",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "383707",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "1.917.956,00 €",
+        "bote": "600.000,00 €"
+      },
+      {
         "iso": "2026-11-21",
         "fecha": "Sábado, 21 noviembre 2026",
         "numeros": [
@@ -266,6 +321,73 @@
       }
     ],
     "elgordo": [
+      {
+        "iso": "2026-11-22",
+        "fecha": "Domingo, 22 noviembre 2026",
+        "numeros": [
+          "9",
+          "13",
+          "16",
+          "19",
+          "45"
+        ],
+        "extras": [
+          "C 6"
+        ],
+        "etiquetas": {
+          "C": "Clave"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (5+C)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5)",
+            "acertantes": "2",
+            "premio": "82.537,77 €"
+          },
+          {
+            "cat": "3 (4+C)",
+            "acertantes": "42",
+            "premio": "714,61 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "265",
+            "premio": "132,14 €"
+          },
+          {
+            "cat": "5 (3+C)",
+            "acertantes": "1325",
+            "premio": "30,20 €"
+          },
+          {
+            "cat": "6 (3)",
+            "acertantes": "11739",
+            "premio": "11,08 €"
+          },
+          {
+            "cat": "7 (2+C)",
+            "acertantes": "18357",
+            "premio": "5,45 €"
+          },
+          {
+            "cat": "8 (2)",
+            "acertantes": "172470",
+            "premio": "3,00 €"
+          },
+          {
+            "cat": "Clave",
+            "acertantes": "284509",
+            "premio": "1,50 €"
+          }
+        ],
+        "recaudacion": "4.424.517,00 €",
+        "bote": "22.900.000,00 €"
+      },
       {
         "iso": "2026-11-15",
         "fecha": "Domingo, 15 noviembre 2026",
@@ -527,6 +649,69 @@
     ],
     "quiniela": [
       {
+        "iso": "2026-11-22",
+        "fecha": "Domingo, 22 noviembre 2026",
+        "numeros": [
+          "1",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1",
+          "2",
+          "X",
+          "2",
+          "1",
+          "2",
+          "2",
+          "1",
+          "2"
+        ],
+        "extras": [],
+        "etiquetas": {},
+        "joker": null,
+        "pleno": "1-1",
+        "premios": [
+          {
+            "cat": "P15",
+            "acertantes": "30",
+            "premio": "14.696,74 €"
+          },
+          {
+            "cat": "14",
+            "acertantes": "152",
+            "premio": "3.095,06 €"
+          },
+          {
+            "cat": "13",
+            "acertantes": "3105",
+            "premio": "71,02 €"
+          },
+          {
+            "cat": "12",
+            "acertantes": "28917",
+            "premio": "7,63 €"
+          },
+          {
+            "cat": "11",
+            "acertantes": "148971",
+            "premio": "1,48 €"
+          },
+          {
+            "cat": "10",
+            "acertantes": "455229",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "Elige 8",
+            "acertantes": "7235",
+            "premio": "7,05 €"
+          }
+        ],
+        "recaudacion": "2.940.307,00 €",
+        "bote": "1.000.000,00 €"
+      },
+      {
         "iso": "2026-11-18",
         "fecha": "Miércoles, 18 noviembre 2026",
         "numeros": [
@@ -589,6 +774,27 @@
       }
     ],
     "lototurf": [
+      {
+        "iso": "2026-11-22",
+        "fecha": "Domingo, 22 noviembre 2026",
+        "numeros": [
+          "14",
+          "16",
+          "19",
+          "22",
+          "28",
+          "30"
+        ],
+        "extras": [
+          "C 2",
+          "R 6"
+        ],
+        "etiquetas": {
+          "C": "Caballo",
+          "R": "Reintegro"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-15",
         "fecha": "Domingo, 15 noviembre 2026",

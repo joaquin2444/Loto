@@ -7,14 +7,14 @@
       "iso": "2026-11-23"
     },
     "elgordo": {
-      "importe": "22.900.000 €",
-      "fecha": "Domingo, 22 noviembre 2026",
-      "iso": "2026-11-22"
+      "importe": "23.600.000 €",
+      "fecha": "Domingo, 29 noviembre 2026",
+      "iso": "2026-11-29"
     },
     "bonoloto": {
-      "importe": "600.000 €",
-      "fecha": "Domingo, 22 noviembre 2026",
-      "iso": "2026-11-22"
+      "importe": "1.000.000 €",
+      "fecha": "Lunes, 23 noviembre 2026",
+      "iso": "2026-11-23"
     },
     "euromillones": {
       "importe": "46.000.000 €",
@@ -26,15 +26,10 @@
       "fecha": "Lunes, 23 noviembre 2026",
       "iso": "2026-11-23"
     },
-    "quiniela": {
-      "importe": "1.000.000 €",
-      "fecha": "Domingo, 22 noviembre 2026",
-      "iso": "2026-11-22"
-    },
     "lototurf": {
-      "importe": "1.950.000 €",
-      "fecha": "Domingo, 22 noviembre 2026",
-      "iso": "2026-11-22"
+      "importe": "1.960.000 €",
+      "fecha": "Domingo, 29 noviembre 2026",
+      "iso": "2026-11-29"
     }
   }
 }
