@@ -115,6 +115,46 @@ def buscar_joker(texto):
     return m.group(1).zfill(7) if m else None
 
 
+def extraer_premios(html):
+    """Lee la tabla 'Categorias / Acertantes / Premios' y, si existen, la recaudacion y el bote."""
+    texto = limpiar(re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S))
+    m = re.search(r"Categor[ií]as\s+Acertantes\s+Premios", texto)
+    if not m:
+        return None
+    resto = texto[m.end(): m.end() + 4000]
+
+    corte = len(resto)
+    for marca in ("Recaudaci", "Sobre ", "Comprueba tus premios", "Joker", "Premios del"):
+        i = resto.find(marca)
+        if i != -1:
+            corte = min(corte, i)
+    tabla = resto[:corte]
+
+    # Cada fila termina en un importe: lo anterior es "categoria acertantes"
+    partes = re.split(r"(\d[\d.]*(?:,\d{1,2})?\s?€(?:\s?/\s?mes)?)", tabla)
+    filas = []
+    for i in range(0, len(partes) - 1, 2):
+        mm = re.match(r"^(.*?)\s+(\d[\d.]*)$", partes[i].strip())
+        if not mm or not mm.group(1).strip():
+            continue
+        filas.append({
+            "cat": mm.group(1).strip(),
+            "acertantes": mm.group(2),
+            "premio": re.sub(r"\s*€", " €", partes[i + 1].strip()),
+        })
+    if len(filas) < 2:
+        return None
+
+    datos = {"premios": filas}
+    r = re.search(
+        r"Recaudaci[oó]n\s+(\d[\d.]*,\d{2})\s?€\s+Bote\s+(\d[\d.]*,\d{2})\s?€",
+        resto)
+    if r:
+        datos["recaudacion"] = r.group(1) + " €"
+        datos["bote"] = r.group(2) + " €"
+    return datos
+
+
 def extraer(nombre, html):
     html = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
 
@@ -345,6 +385,10 @@ for nombre, url in WEBS.items():
         }
     if datos.get("pleno"):
         entrada["pleno"] = datos["pleno"]
+    if not es_nacional:
+        extra_premios = extraer_premios(html)
+        if extra_premios:
+            entrada.update(extra_premios)
     clave = entrada["iso"] or entrada["fecha"]
 
     lista = historial["juegos"].setdefault(nombre, [])
@@ -355,6 +399,14 @@ for nombre, url in WEBS.items():
             if (e.get("iso") or e.get("fecha")) == clave and e.get("joker"):
                 entrada["joker"] = e["joker"]
                 break
+
+    # Si ya habia premios guardados de este mismo sorteo, no se pierden
+    for e in lista:
+        if (e.get("iso") or e.get("fecha")) == clave:
+            for campo in ("premios", "recaudacion", "bote"):
+                if campo not in entrada and e.get(campo):
+                    entrada[campo] = e[campo]
+            break
 
     # Quitar el mismo sorteo si ya estaba, y los demasiado antiguos
     lista[:] = [
