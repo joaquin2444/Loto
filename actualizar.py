@@ -108,11 +108,11 @@ def valido(e):
 
 
 def buscar_joker(texto):
-    """Busca el Joker en un texto limpio. Son 7 cifras; si la web quita el cero inicial
-    y vienen 6, se completa con un cero delante."""
-    for m in re.finditer(r"Joker\W{0,6}(\d{6,7})(?!\d)", texto):
-        return m.group(1).zfill(7)
-    return None
+    """Busca el Joker justo al principio del texto que sigue a los numeros. Son 7 cifras;
+    si la web quita los ceros iniciales (por ejemplo 31430), se completa con ceros
+    por delante (0031430)."""
+    m = re.search(r"Joker\W{0,6}(\d{1,7})(?!\d)", texto[:100])
+    return m.group(1).zfill(7) if m else None
 
 
 def extraer(nombre, html):
