@@ -21,7 +21,46 @@
           "C": "Complementario",
           "R": "Reintegro"
         },
-        "joker": "0031430"
+        "joker": "0031430",
+        "premios": [
+          {
+            "cat": "Especial (6+R)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "1 (6)",
+            "acertantes": "1",
+            "premio": "1.022.726,62 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "8",
+            "premio": "20.730,95 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "212",
+            "premio": "1.434,22 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "11645",
+            "premio": "37,98 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "207487",
+            "premio": "8,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "931618",
+            "premio": "1,00 €"
+          }
+        ],
+        "recaudacion": "9.831.160,00 €",
+        "bote": "2.300.000,00 €"
       },
       {
         "iso": "2026-11-19",
@@ -86,7 +125,41 @@
           "C": "Complementario",
           "R": "Reintegro"
         },
-        "joker": null
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "7",
+            "premio": "17.558,08 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "100",
+            "premio": "614,53 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "5372",
+            "premio": "17,16 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "90060",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "433092",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "2.166.161,50 €",
+        "bote": "0,00 €"
       },
       {
         "iso": "2026-11-20",
@@ -209,7 +282,56 @@
         "etiquetas": {
           "C": "Clave"
         },
-        "joker": null
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (5+C)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5)",
+            "acertantes": "1",
+            "premio": "159.646,61 €"
+          },
+          {
+            "cat": "3 (4+C)",
+            "acertantes": "31",
+            "premio": "936,34 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "266",
+            "premio": "127,31 €"
+          },
+          {
+            "cat": "5 (3+C)",
+            "acertantes": "1063",
+            "premio": "36,41 €"
+          },
+          {
+            "cat": "6 (3)",
+            "acertantes": "12087",
+            "premio": "10,41 €"
+          },
+          {
+            "cat": "7 (2+C)",
+            "acertantes": "15768",
+            "premio": "6,14 €"
+          },
+          {
+            "cat": "8 (2)",
+            "acertantes": "173883",
+            "premio": "3,00 €"
+          },
+          {
+            "cat": "Clave",
+            "acertantes": "251817",
+            "premio": "1,50 €"
+          }
+        ],
+        "recaudacion": "4.371.420,00 €",
+        "bote": "21.800.000,00 €"
       }
     ],
     "eurodreams": [
@@ -230,7 +352,39 @@
         "etiquetas": {
           "S": "Sueño"
         },
-        "joker": null
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6 + 1)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (6 + 0)",
+            "acertantes": "2",
+            "premio": "120.000,00 €"
+          },
+          {
+            "cat": "3 (5 + 0)",
+            "acertantes": "161",
+            "premio": "421,85 €"
+          },
+          {
+            "cat": "4 (4 + 0)",
+            "acertantes": "6674",
+            "premio": "28,53 €"
+          },
+          {
+            "cat": "5 (3 + 0)",
+            "acertantes": "88987",
+            "premio": "4,49 €"
+          },
+          {
+            "cat": "6 (2 + 0)",
+            "acertantes": "494813",
+            "premio": "2,50 €"
+          }
+        ]
       },
       {
         "iso": "2026-11-16",
@@ -394,7 +548,44 @@
         "extras": [],
         "etiquetas": {},
         "joker": null,
-        "pleno": "2-M"
+        "pleno": "2-M",
+        "premios": [
+          {
+            "cat": "P15",
+            "acertantes": "14",
+            "premio": "3.331,61 €"
+          },
+          {
+            "cat": "14",
+            "acertantes": "267",
+            "premio": "372,67 €"
+          },
+          {
+            "cat": "13",
+            "acertantes": "4832",
+            "premio": "9,65 €"
+          },
+          {
+            "cat": "12",
+            "acertantes": "30425",
+            "premio": "3,07 €"
+          },
+          {
+            "cat": "11",
+            "acertantes": "90814",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "10",
+            "acertantes": "155685",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "Elige 8",
+            "acertantes": "5390",
+            "premio": "2,85 €"
+          }
+        ]
       }
     ],
     "lototurf": [
