@@ -169,6 +169,17 @@
   .sorteo { padding: 14px 0; border-bottom: 1px solid var(--linea); }
   .sorteo .fecha { margin: 0 0 8px; color: var(--suave); font-size: 0.9rem; }
   .sorteo .bolas { --t: 38px; }
+
+  /* Acertantes y premios */
+  .tabla-premios { margin-top: 18px; }
+  .tabla-premios h3 { margin: 0 0 6px; font-size: 0.95rem; }
+  .tabla-premios table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .tabla-premios th { text-align: right; font-size: 0.78rem; font-weight: 600; color: var(--suave); padding: 4px 0 6px; border-bottom: 1px solid var(--linea); }
+  .tabla-premios td { text-align: right; padding: 7px 0; font-size: 0.92rem; border-bottom: 1px solid var(--linea); }
+  .tabla-premios th:first-child, .tabla-premios td:first-child { text-align: left; }
+  .tabla-premios td:first-child { font-weight: 700; color: var(--c); }
+  .tabla-premios .totales { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-top: 10px; font-size: 0.9rem; color: var(--suave); }
+  .tabla-premios .totales strong { color: var(--texto); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -176,9 +187,9 @@
 
 <script>
   const JUEGOS = [
-    { id: "primitiva", nombre: "La Primitiva", clase: "c-prim", dias: [4, 6] },
+    { id: "primitiva", nombre: "La Primitiva", clase: "c-prim", dias: [1, 4, 6] },
     { id: "elgordo", nombre: "El Gordo de la Primitiva", corto: "El Gordo", sub: "de la Primitiva", clase: "c-gordo", dias: [0] },
-    { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono", dias: [1, 2, 3, 4, 5, 6] },
+    { id: "bonoloto", nombre: "Bonoloto", clase: "c-bono", dias: [0, 1, 2, 3, 4, 5, 6] },
     { id: "euromillones", nombre: "Euromillones", clase: "c-euro", dias: [2, 5] },
     { id: "eurodreams", nombre: "EuroDreams", clase: "c-dream", dias: [1, 4], nota: "al mes durante 30 años" },
     { id: "loterianacional", nombre: "Lotería Nacional", clase: "c-nacional", dias: [4, 6],
@@ -389,6 +400,39 @@
     app.appendChild(cont);
   }
 
+  function tablaPremios(s) {
+    if (!s.premios || !s.premios.length) return null;
+    const cont = crear("div", "tabla-premios");
+    cont.appendChild(crear("h3", "", "Acertantes y premios"));
+    const t = crear("table");
+    const cab = crear("tr");
+    ["Categoría", "Acertantes", "Premio"].forEach(function (x) { cab.appendChild(crear("th", "", x)); });
+    t.appendChild(cab);
+    s.premios.forEach(function (f) {
+      const tr = crear("tr");
+      tr.appendChild(crear("td", "", f.cat));
+      tr.appendChild(crear("td", "", f.acertantes));
+      tr.appendChild(crear("td", "", f.premio));
+      t.appendChild(tr);
+    });
+    cont.appendChild(t);
+    if (s.recaudacion || s.bote) {
+      const tot = crear("div", "totales");
+      if (s.recaudacion) {
+        const a = crear("span", "", "Recaudación ");
+        a.appendChild(crear("strong", "", s.recaudacion));
+        tot.appendChild(a);
+      }
+      if (s.bote) {
+        const b = crear("span", "", "Bote ");
+        b.appendChild(crear("strong", "", s.bote));
+        tot.appendChild(b);
+      }
+      cont.appendChild(tot);
+    }
+    return cont;
+  }
+
   function bloqueSorteo(s) {
     const bloque = crear("div", "sorteo");
     bloque.appendChild(crear("p", "fecha", s.fecha || ""));
@@ -403,6 +447,8 @@
       bloque.appendChild(bolas(s.numeros));
       const ex = extras(s);
       if (ex) bloque.appendChild(ex);
+      const tp = tablaPremios(s);
+      if (tp) bloque.appendChild(tp);
     }
     return bloque;
   }
