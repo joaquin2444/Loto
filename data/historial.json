@@ -167,6 +167,61 @@
     ],
     "bonoloto": [
       {
+        "iso": "2026-11-24",
+        "fecha": "Martes, 24 noviembre 2026",
+        "numeros": [
+          "9",
+          "13",
+          "34",
+          "36",
+          "37",
+          "44"
+        ],
+        "extras": [
+          "C 27",
+          "R 4"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "2",
+            "premio": "79.940,50 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "99",
+            "premio": "807,48 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "4716",
+            "premio": "25,43 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "89441",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "513834",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "2.571.486,50 €",
+        "bote": "1.300.000,00 €"
+      },
+      {
         "iso": "2026-11-23",
         "fecha": "Lunes, 23 noviembre 2026",
         "numeros": [
@@ -396,6 +451,25 @@
       }
     ],
     "euromillones": [
+      {
+        "iso": "2026-11-24",
+        "fecha": "Martes, 24 noviembre 2026",
+        "numeros": [
+          "3",
+          "5",
+          "37",
+          "44",
+          "49"
+        ],
+        "extras": [
+          "E 5",
+          "E 6"
+        ],
+        "etiquetas": {
+          "E": "Estrellas"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-20",
         "fecha": "Viernes, 20 noviembre 2026",
