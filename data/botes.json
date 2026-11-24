@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-23",
+  "actualizado": "2026-11-24",
   "botes": {
     "primitiva": {
       "importe": "4.000.000 €",
@@ -20,6 +20,11 @@
       "importe": "46.000.000 €",
       "fecha": "Martes, 24 noviembre 2026",
       "iso": "2026-11-24"
+    },
+    "quiniela": {
+      "importe": "1.100.000 €",
+      "fecha": "Domingo, 29 noviembre 2026",
+      "iso": "2026-11-29"
     },
     "lototurf": {
       "importe": "1.960.000 €",
