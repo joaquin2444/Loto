@@ -167,6 +167,61 @@
     ],
     "bonoloto": [
       {
+        "iso": "2026-11-25",
+        "fecha": "Miércoles, 25 noviembre 2026",
+        "numeros": [
+          "1",
+          "2",
+          "13",
+          "35",
+          "39",
+          "41"
+        ],
+        "extras": [
+          "C 46",
+          "R 0"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "1",
+            "premio": "2.008.996,62 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "2",
+            "premio": "94.232,45 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "93",
+            "premio": "1.013,25 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "4768",
+            "premio": "29,65 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "94153",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "583239",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "2.930.970,00 €",
+        "bote": "1.800.000,00 €"
+      },
+      {
         "iso": "2026-11-24",
         "fecha": "Martes, 24 noviembre 2026",
         "numeros": [
