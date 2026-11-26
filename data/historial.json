@@ -3,6 +3,66 @@
   "juegos": {
     "primitiva": [
       {
+        "iso": "2026-11-26",
+        "fecha": "Jueves, 26 noviembre 2026",
+        "numeros": [
+          "4",
+          "8",
+          "15",
+          "29",
+          "45",
+          "48"
+        ],
+        "extras": [
+          "C 6",
+          "R 2"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": "5801896",
+        "premios": [
+          {
+            "cat": "Especial (6+R)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "1 (6)",
+            "acertantes": "1",
+            "premio": "1.140.923,77 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "5",
+            "premio": "37.002,93 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "167",
+            "premio": "2.031,10 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "10408",
+            "premio": "47,40 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "193959",
+            "premio": "8,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "984619",
+            "premio": "1,00 €"
+          }
+        ],
+        "recaudacion": "10.300.555,00 €",
+        "bote": "4.000.000,00 €"
+      },
+      {
         "iso": "2026-11-23",
         "fecha": "Lunes, 23 noviembre 2026",
         "numeros": [
@@ -166,6 +226,61 @@
       }
     ],
     "bonoloto": [
+      {
+        "iso": "2026-11-26",
+        "fecha": "Jueves, 26 noviembre 2026",
+        "numeros": [
+          "13",
+          "15",
+          "16",
+          "21",
+          "37",
+          "41"
+        ],
+        "extras": [
+          "C 24",
+          "R 0"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "3",
+            "premio": "45.549,85 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "76",
+            "premio": "899,01 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "4270",
+            "premio": "24,00 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "81407",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "448029",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "2.241.946,00 €",
+        "bote": "0,00 €"
+      },
       {
         "iso": "2026-11-25",
         "fecha": "Miércoles, 25 noviembre 2026",
@@ -702,6 +817,57 @@
     ],
     "eurodreams": [
       {
+        "iso": "2026-11-26",
+        "fecha": "Jueves, 26 noviembre 2026",
+        "numeros": [
+          "1",
+          "11",
+          "15",
+          "25",
+          "31",
+          "32"
+        ],
+        "extras": [
+          "S 4"
+        ],
+        "etiquetas": {
+          "S": "Sueño"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6 + 1)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (6 + 0)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "3 (5 + 0)",
+            "acertantes": "130",
+            "premio": "685,28 €"
+          },
+          {
+            "cat": "4 (4 + 0)",
+            "acertantes": "5946",
+            "premio": "42,00 €"
+          },
+          {
+            "cat": "5 (3 + 0)",
+            "acertantes": "89446",
+            "premio": "5,86 €"
+          },
+          {
+            "cat": "6 (2 + 0)",
+            "acertantes": "543374",
+            "premio": "2,50 €"
+          }
+        ]
+      },
+      {
         "iso": "2026-11-23",
         "fecha": "Lunes, 23 noviembre 2026",
         "numeros": [
@@ -825,6 +991,43 @@
     ],
     "loterianacional": [
       {
+        "iso": "2026-11-26",
+        "fecha": "Jueves, 26 noviembre 2026",
+        "primero": "76.325",
+        "segundo": "81.897",
+        "cifras4": [
+          "1527",
+          "2217",
+          "2413",
+          "5758"
+        ],
+        "cifras3": [
+          "022",
+          "173",
+          "305",
+          "346",
+          "703",
+          "954",
+          "956"
+        ],
+        "cifras2": [
+          "23",
+          "35",
+          "38",
+          "50",
+          "51",
+          "52",
+          "77",
+          "81",
+          "95"
+        ],
+        "reintegros": [
+          "1",
+          "3",
+          "5"
+        ]
+      },
+      {
         "iso": "2026-11-21",
         "fecha": "Sábado, 21 noviembre 2026",
         "primero": "23.641",
@@ -943,6 +1146,69 @@
       }
     ],
     "quiniela": [
+      {
+        "iso": "2026-11-25",
+        "fecha": "Miércoles, 25 noviembre 2026",
+        "numeros": [
+          "X",
+          "2",
+          "X",
+          "1",
+          "2",
+          "2",
+          "2",
+          "2",
+          "1",
+          "X",
+          "2",
+          "X",
+          "2",
+          "1"
+        ],
+        "extras": [],
+        "etiquetas": {},
+        "joker": null,
+        "pleno": "2-0",
+        "premios": [
+          {
+            "cat": "P15",
+            "acertantes": "1",
+            "premio": "78.930,45 €"
+          },
+          {
+            "cat": "14",
+            "acertantes": "11",
+            "premio": "15.307,72 €"
+          },
+          {
+            "cat": "13",
+            "acertantes": "147",
+            "premio": "536,94 €"
+          },
+          {
+            "cat": "12",
+            "acertantes": "1438",
+            "premio": "54,89 €"
+          },
+          {
+            "cat": "11",
+            "acertantes": "10111",
+            "premio": "7,81 €"
+          },
+          {
+            "cat": "10",
+            "acertantes": "51851",
+            "premio": "1,83 €"
+          },
+          {
+            "cat": "Elige 8",
+            "acertantes": "95",
+            "premio": "258,51 €"
+          }
+        ],
+        "recaudacion": "1.052.406,00 €",
+        "bote": "0,00 €"
+      },
       {
         "iso": "2026-11-22",
         "fecha": "Domingo, 22 noviembre 2026",

@@ -2,14 +2,19 @@
   "actualizado": "2026-11-26",
   "botes": {
     "primitiva": {
-      "importe": "4.000.000 €",
-      "fecha": "Jueves, 26 noviembre 2026",
-      "iso": "2026-11-26"
+      "importe": "4.900.000 €",
+      "fecha": "Sábado, 28 noviembre 2026",
+      "iso": "2026-11-28"
     },
     "elgordo": {
       "importe": "23.600.000 €",
       "fecha": "Domingo, 29 noviembre 2026",
       "iso": "2026-11-29"
+    },
+    "bonoloto": {
+      "importe": "600.000 €",
+      "fecha": "Viernes, 27 noviembre 2026",
+      "iso": "2026-11-27"
     },
     "euromillones": {
       "importe": "59.000.000 €",
