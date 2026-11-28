@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-27",
+  "actualizado": "2026-11-28",
   "juegos": {
     "primitiva": [
       {
@@ -226,6 +226,61 @@
       }
     ],
     "bonoloto": [
+      {
+        "iso": "2026-11-27",
+        "fecha": "Viernes, 27 noviembre 2026",
+        "numeros": [
+          "3",
+          "9",
+          "12",
+          "15",
+          "39",
+          "41"
+        ],
+        "extras": [
+          "C 35",
+          "R 6"
+        ],
+        "etiquetas": {
+          "C": "Complementario",
+          "R": "Reintegro"
+        },
+        "joker": null,
+        "premios": [
+          {
+            "cat": "1 (6)",
+            "acertantes": "0",
+            "premio": "0,00 €"
+          },
+          {
+            "cat": "2 (5+C)",
+            "acertantes": "2",
+            "premio": "80.090,96 €"
+          },
+          {
+            "cat": "3 (5)",
+            "acertantes": "101",
+            "premio": "792,98 €"
+          },
+          {
+            "cat": "4 (4)",
+            "acertantes": "5444",
+            "premio": "22,07 €"
+          },
+          {
+            "cat": "5 (3)",
+            "acertantes": "94869",
+            "premio": "4,00 €"
+          },
+          {
+            "cat": "Reintegro",
+            "acertantes": "525529",
+            "premio": "0,50 €"
+          }
+        ],
+        "recaudacion": "2.623.079,00 €",
+        "bote": "600.000,00 €"
+      },
       {
         "iso": "2026-11-26",
         "fecha": "Jueves, 26 noviembre 2026",
@@ -621,6 +676,25 @@
       }
     ],
     "euromillones": [
+      {
+        "iso": "2026-11-27",
+        "fecha": "Viernes, 27 noviembre 2026",
+        "numeros": [
+          "12",
+          "17",
+          "26",
+          "34",
+          "38"
+        ],
+        "extras": [
+          "E 5",
+          "E 9"
+        ],
+        "etiquetas": {
+          "E": "Estrellas"
+        },
+        "joker": null
+      },
       {
         "iso": "2026-11-24",
         "fecha": "Martes, 24 noviembre 2026",
